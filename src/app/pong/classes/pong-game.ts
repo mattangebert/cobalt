@@ -25,7 +25,7 @@ export class PongGame {
 
         this.ball =  new Ball(15, 15, 1.9, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
         this.playerPaddle =  new Paddle(100, 20, 1.5, {x: 50, y: height / 2 });
-        this.enemyPaddle =  new Paddle(100, 20, 1.3, {x: width - 50, y: height / 2 });
+        this.enemyPaddle =  new Paddle(100, 20, 1.5, {x: width - 50, y: height / 2 });
     }
 
     tick(controlState: PongControlState): void {

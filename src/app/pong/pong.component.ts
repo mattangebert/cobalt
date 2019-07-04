@@ -1,14 +1,18 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { PongGame, PongControlState } from './classes/pong-game';
 import { Boundaries } from '../classes/moveable-object';
+import { OptionService } from '../form-option/service/option.service';
 
 @Component({
   selector: 'app-pong',
   templateUrl: './pong.component.html',
-  styleUrls: ['./pong.component.scss']
+  styleUrls: ['./pong.component.scss'],
+  providers: [ OptionService ]
 })
 export class PongComponent implements OnInit {
   @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef
+
+  options: any[];
 
   public width: number = 800;
   public height: number = 600;
@@ -20,9 +24,10 @@ export class PongComponent implements OnInit {
   private keyUp: Array<string> = ['w', 'ArrowUp'];
   private keyDown: Array<string> = ['s', 'ArrowDown']
 
-  constructor() { 
+  constructor(optionService : OptionService) {
     this.pongGame = new PongGame(this.height, this.width);
     this.controlState = {upPressed: false, downPressed: false}
+    this.options = optionService.getOptions();
   }
 
   ngOnInit() {
@@ -65,7 +70,7 @@ export class PongComponent implements OnInit {
     let ballObj = this.pongGame.ball;
     bounds = ballObj.getCollisionBoundaries();
     //this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
-    this.context.arc(bounds.left, bounds.top, 8, 0 ,2 * Math.PI)
+    this.context.arc(bounds.left, bounds.top, 5, 0 ,2 * Math.PI)
     this.context.fill();
     this.context.beginPath();
     // Render next frame
@@ -94,4 +99,7 @@ export class PongComponent implements OnInit {
     }
   }
 
+  onClickSubmit(formData) {
+    console.log(formData);
+ }
 }
