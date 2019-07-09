@@ -24,4 +24,9 @@ export class FormOptionComponent implements OnInit {
   onSubmit() {
     this.payLoad = JSON.stringify(this.form.value);
   }
+
+  getForm(): FormGroup {
+    return this.form
+  }
+
 }

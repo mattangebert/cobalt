@@ -1,16 +1,35 @@
 
 <div [formGroup]="form">
-    <label [attr.for]="option.key">{{ option.label }}</label>
+    <label *ngIf="option.type != 'radio'" [attr.for]="option.key">{{ option.label }}</label> <!-- Hide for radio as they have legend-->
 
     <div [ngSwitch]="option.controlType">
 
         <input *ngSwitchCase="'textbox'" [formControlName]="option.key"
                 [id]="option.key" [type]="option.type"/>
 
-        <select [id]="option.key" *ngSwitchCase="'dropwdown'" [formControlName]="option.key">
-            <option *ngFor="let opt of option.options" [value]="opt.key">{{ opt.value }}</option>
-        </select>
+        <input *ngSwitchCase="'checkbox'" [formControlName]="option.key" type="checkbox"
+                [id]="option.key"/>
 
+        <ng-container *ngSwitchCase="'select'">
+            <ng-container [ngSwitch]="option.type">
+                    <select [id]="option.key" *ngSwitchCase="'dropdown'" [formControlName]="option.key">
+                            <option *ngFor="let opt of option.options" [value]="opt.key">{{ opt.value }}</option>
+                    </select>
+
+                    <select [id]="option.key" *ngSwitchCase="'multi'" [formControlName]="option.key" multiple>
+                            <option *ngFor="let opt of option.options" [value]="opt.key">{{ opt.value }}</option>
+                    </select>
+
+                    <fieldset *ngSwitchCase="'radio'">
+                        <legend>{{ option.label }}</legend>
+                        <p *ngFor="let opt of option.options; first as isFirst">
+                            <input [name]="option.key" [id]="option.key + opt.key" [value]="opt.key"
+                                    [formControlName]="option.key" type="radio" [checked]="opt.value === option.value"/>
+                            <label [attr.for]="option.key + opt.key">{{ opt.value }}</label>
+                        </p>
+                    </fieldset>
+            </ng-container>
+        </ng-container>
     </div>
 
     <div class="errorMessage" *ngIf="!isValid"> {{ option.label }} is required</div>

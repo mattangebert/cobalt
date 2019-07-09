@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { PongGame, PongControlState } from './classes/pong-game';
+import { PongGame, PongControlStates, PongOptions } from './classes/pong-game';
 import { Boundaries } from '../classes/moveable-object';
 import { OptionService } from '../form-option/service/option.service';
+import { FormOptionComponent } from '../form-option/form-option.component';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-pong',
@@ -11,6 +13,7 @@ import { OptionService } from '../form-option/service/option.service';
 })
 export class PongComponent implements OnInit {
   @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef
+  @ViewChild('optionForm', { static: true}) form: FormOptionComponent;
 
   options: any[];
 
@@ -20,22 +23,54 @@ export class PongComponent implements OnInit {
   private context: CanvasRenderingContext2D;
   private pongGame: PongGame;
   private ticksPerSecond: number = 60;
-  private controlState: PongControlState;
-  private keyUp: Array<string> = ['w', 'ArrowUp'];
-  private keyDown: Array<string> = ['s', 'ArrowDown']
+  private controlStates: PongControlStates;
+  private interval;
 
   constructor(optionService : OptionService) {
     this.pongGame = new PongGame(this.height, this.width);
-    this.controlState = {upPressed: false, downPressed: false}
+    this.controlStates = { 
+      controlOne: {upPressed: false, downPressed: false}, 
+      controlTwo: {upPressed: false, downPressed: false}, 
+    } 
     this.options = optionService.getOptions();
   }
 
   ngOnInit() {
+    this.initialiseGame();
+  }
+
+  ngAfterViewInit() {
+    this.form.getForm().valueChanges.forEach(
+      (value: string) => {
+        const options: PongOptions = {
+          playerOne: {
+            isPlayer: value['player1'] === 'player'
+          },
+          playerTwo: {
+            isPlayer: value['player2'] === 'player'
+          }
+        }
+
+        this.pongGame.setOptions(options);
+      }
+    );
+  }
+
+  initialiseGame() {
     this.context = this.canvasElement.nativeElement.getContext('2d');
     this.renderFrame();
+  }
 
-    setInterval(() => {
-      this.pongGame.tick(this.controlState);
+  startGame()
+  {
+    if(this.interval) {
+      clearInterval(this.interval);
+      this.pongGame.reset();
+      this.initialiseGame();
+    }
+     
+    this.interval = setInterval(() => {
+      this.pongGame.tick(this.controlStates);
     }, 1 / this.ticksPerSecond);
   }
 
@@ -57,12 +92,12 @@ export class PongComponent implements OnInit {
     let bounds: Boundaries;
 
     // Draw player paddle
-    let paddleObj = this.pongGame.playerPaddle;
+    let paddleObj = this.pongGame.playerOnePaddle;
     bounds = paddleObj.getCollisionBoundaries();
     this.context.fillRect(bounds.left, bounds.top, paddleObj.getWidth(), paddleObj.getHeight());
 
     // Draw enemy paddle
-    let enemyObj = this.pongGame.enemyPaddle;
+    let enemyObj = this.pongGame.playerTwoPaddle;
     bounds = enemyObj.getCollisionBoundaries();
     this.context.fillRect(bounds.left, bounds.top, enemyObj.getWidth(), enemyObj.getHeight());
 
@@ -70,32 +105,46 @@ export class PongComponent implements OnInit {
     let ballObj = this.pongGame.ball;
     bounds = ballObj.getCollisionBoundaries();
     //this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
+    
+    
     this.context.arc(bounds.left, bounds.top, 5, 0 ,2 * Math.PI)
     this.context.fill();
     this.context.beginPath();
+
+
     // Render next frame
     window.requestAnimationFrame(() => this.renderFrame());
   }
 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (this.keyUp.indexOf(event.key) !== -1) {
-      this.controlState.upPressed = true;
+    if ('w' == event.key) {
+      this.controlStates.controlOne.upPressed = true;
     }
-
-    if (this.keyDown.indexOf(event.key) !== -1) {
-      this.controlState.downPressed = true;
+    if ('s' == event.key) {
+      this.controlStates.controlOne.downPressed = true;
+    }
+    if ('ArrowUp' == event.key) {
+      this.controlStates.controlTwo.upPressed = true;
+    }
+    if ('ArrowDown' == event.key) {
+      this.controlStates.controlTwo.downPressed = true;
     }
   }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent2(event: KeyboardEvent) {
-    if (this.keyUp.indexOf(event.key) !== -1) {
-      this.controlState.upPressed = false;
+    if ('w' == event.key) {
+      this.controlStates.controlOne.upPressed = false;
     }
-
-    if (this.keyDown.indexOf(event.key) !== -1) {
-      this.controlState.downPressed = false;
+    if ('s' == event.key) {
+      this.controlStates.controlOne.downPressed = false;
+    }
+    if ('ArrowUp' == event.key) {
+      this.controlStates.controlTwo.upPressed = false;
+    }
+    if ('ArrowDown' == event.key) {
+      this.controlStates.controlTwo.downPressed = false;
     }
   }
 
