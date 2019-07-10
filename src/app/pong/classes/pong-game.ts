@@ -124,7 +124,7 @@ export class PongGame {
                
         if (this.ball.getPosition().y < paddle.getPosition().y + offset && paddleBounds.top > 0) {
             paddle.accelerateUp(1)
-        } else if (paddleBounds.bottom + offset < this.height) { 
+        } else if (paddleBounds.bottom < this.height) {
             paddle.accelerateDown(1)
         }
     }
