@@ -104,6 +104,7 @@ export class PongGame {
 
     private getOffset(paddle: Paddle): number {
         return this.getRndInteger(0, paddle.getHeight() / 2) * ( Math.round(Math.random()) * 2 - 1 );
+
     }
 
     private getOffsets(): void
@@ -114,7 +115,7 @@ export class PongGame {
         } 
         
         if (!this.offsets.isPositive && this.ball.getSpeedRatio().y > 0) {
-            this.offsets.playerOne = this.getOffset(this.playerTwoPaddle);
+            this.offsets.playerTwo = this.getOffset(this.playerTwoPaddle);
             this.offsets.isPositive = !this.offsets.isPositive;
         }
     }
@@ -167,24 +168,19 @@ export class PongGame {
     }
 
     private checkPaddleBallCollision(paddle: Paddle, reverse: boolean) {
-        let paddleBounds =  paddle.getCollisionBoundaries();
-        let ballBounds = this.ball.getCollisionBoundaries();
-        
-        let condition =  ballBounds.left <= paddleBounds.right &&
-        paddleBounds.right - ballBounds.left <= 3 &&
-        ballBounds.bottom >= paddleBounds.top &&
-        ballBounds.top <= paddleBounds.bottom;
+        const paddleBounds =  paddle.getCollisionBoundaries();
+        const ballBounds = this.ball.getCollisionBoundaries();
 
+        const leftBox = paddleBounds.right < ballBounds.right ? paddleBounds : ballBounds; // get box that is further left
+        const rightBox = paddleBounds.right < ballBounds.right ? ballBounds : paddleBounds; // get box that is furher right
 
-        if (reverse) {
-            condition = ballBounds.right <= paddleBounds.left &&
-            paddleBounds.left - ballBounds.right <= 3 &&
-            ballBounds.bottom >= paddleBounds.top &&
-            ballBounds.top <= paddleBounds.bottom;
-        }
+        const condition = !(leftBox.right < rightBox.left && leftBox.right < rightBox.right) && 
+            ballBounds.top <= paddleBounds.bottom &&
+            ballBounds.bottom >= paddleBounds.top;
 
         if ( condition ) {
-          this.ball.reverseX();
+            let reverseCondtion = reverse ? this.ball.getSpeedRatio().x > 0 : this.ball.getSpeedRatio().x < 0; // let ball only fly toward enemy
+            if (reverseCondtion) { this.ball.reverseX(); }
 
           /* Set vertical speed ratio by taking ratio of 
           * dist(centerOfBall, centerOfPaddle) to dist(topOfPaddle, centerOfPaddle)
