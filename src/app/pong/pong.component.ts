@@ -44,8 +44,9 @@ export class PongComponent implements OnInit {
       (value: string) => {
         this.pongGame.pos.setIsPlayerOne(value['player1'] === 'player');
         this.pongGame.pos.setIsPlayerTwo(value['player2'] === 'player');
-        this.pongGame.pos.setPaddleLeftOption({height: value['paddleLeftHeight'], width: 20, speed: 1.5});
-        this.pongGame.pos.setPaddleRightOption({height: value['paddleRightHeight'], width: 20, speed: 1.5});
+
+        this.pongGame.pos.setPaddleLeftOption({height: value['paddleLeftHeight'], width: 20, speed: value['paddleLeftSpeed']});
+        this.pongGame.pos.setPaddleRightOption({height: value['paddleRightHeight'], width: 20, speed: value['paddleRightSpeed']});
       }
     );
   }

@@ -5,7 +5,7 @@
     <div [ngSwitch]="option.controlType">
 
         <input *ngSwitchCase="'input'" [formControlName]="option.key"
-                [id]="option.key" [type]="option.type" [min]="option.min" [max]="option.max"/>
+                [id]="option.key" [type]="option.type" [min]="option.min" [max]="option.max" [step]="option.step"/>
 
         <input *ngSwitchCase="'checkbox'" [formControlName]="option.key" type="checkbox"
                 [id]="option.key"/>

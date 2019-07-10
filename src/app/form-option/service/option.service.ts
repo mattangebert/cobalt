@@ -62,13 +62,35 @@ export class OptionService {
       }),
 
       new OptionInput({
+        key: 'paddleLeftSpeed',
+        label: 'Left Paddel Speed',
+        type: 'number',
+        value: 1.5,
+        min: 0,
+        max: 5,
+        step: 0.1,
+        order: 4
+      }),
+
+      new OptionInput({
         key: 'paddleRightHeight',
         label: 'Right Paddel Height',
         type: 'number',
         value: 100,
         min: 10,
         max: 600,
-        order: 4
+        order: 5
+      }),
+
+      new OptionInput({
+        key: 'paddleRightSpeed',
+        label: 'Right Paddel Speed',
+        type: 'number',
+        value: 1.5,
+        min: 0,
+        max: 5,
+        step: 0.1,
+        order: 6
       }),
     ];
 

@@ -5,14 +5,16 @@ export class OptionInput extends OptionBase<string> {
     type: string;
     min: number;
     max: number;
+    step: number;
 
     constructor(options: {} = {}) {
         super(options)
         this.type = options['type'] || '';
 
         if (this.type === 'number') {
-            this.min = options['min'] || '';
-            this.max = options['max'] || '';
+            this.min = options['min'] !== undefined ? options['min'] : '';
+            this.max = options['max'] !== undefined ? options['max'] : '';
+            this.step = options['step'] || 1;
         }
     }
 }
