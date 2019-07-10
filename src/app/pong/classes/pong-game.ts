@@ -135,7 +135,8 @@ export class PongGame {
 
     private checkCollisions(): void {
         let ballBounds = this.ball.getCollisionBoundaries();
-        let paddleBounds =  this.playerOnePaddle.getCollisionBoundaries();
+        let paddleBoundsOne =  this.playerOnePaddle.getCollisionBoundaries();
+        let paddleBoundsTwo =  this.playerTwoPaddle.getCollisionBoundaries();
 
         // bounce of top|bottom
         if (ballBounds.bottom >= this.height && this.ball.getSpeedRatio().y >= 0) {
@@ -147,10 +148,14 @@ export class PongGame {
             this.ball.reverseY();
         }
 
-
         // stop playerOne paddle on game borders
-        if (paddleBounds.top <= 0 || paddleBounds.bottom >= this.height) {
+        if (paddleBoundsOne.top <= 0 || paddleBoundsOne.bottom >= this.height) {
             this.playerOnePaddle.declerate(1);
+        }
+
+        // stop playerTwo paddle on game border
+        if (paddleBoundsTwo.top <= 0 || paddleBoundsTwo.bottom >= this.height) {
+            this.playerTwoPaddle.declerate(1);
         }
 
         // playerOnePaddle hit ball
