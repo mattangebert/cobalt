@@ -3,7 +3,7 @@ import { PongGame, PongControlStates } from './classes/pong-game';
 import { Boundaries } from '../classes/moveable-object';
 import { OptionService } from '../form-option/service/option.service';
 import { FormOptionComponent } from '../form-option/form-option.component';
-import { PongOptionService } from './services/pong-option.service';
+import { PongOptionService, PongOption } from './services/pong-option.service';
 
 @Component({
   selector: 'app-pong',
@@ -25,6 +25,7 @@ export class PongComponent implements OnInit {
   private ticksPerSecond: number = 60;
   private controlStates: PongControlStates;
   private interval;
+  private pongOptions: PongOption;
 
   constructor(optionService: OptionService, pos: PongOptionService) {
     this.pongGame = new PongGame(this.height, this.width, pos);
@@ -33,6 +34,7 @@ export class PongComponent implements OnInit {
       controlTwo: {upPressed: false, downPressed: false}, 
     } 
     this.options = optionService.getOptions();
+    this.pongOptions = pos.getOptions();
   }
 
   ngOnInit() {
@@ -42,11 +44,11 @@ export class PongComponent implements OnInit {
   ngAfterViewInit() {
     this.form.getForm().valueChanges.forEach(
       (value: string) => {
-        this.pongGame.pos.setIsPlayerOne(value['player1'] === 'player');
-        this.pongGame.pos.setIsPlayerTwo(value['player2'] === 'player');
+        this.pongOptions.isPlayerOne = value['player1'] === 'player';
+        this.pongOptions.isPlayerTwo = value['player2'] === 'player';
 
-        this.pongGame.pos.setPaddleLeftOption({height: value['paddleLeftHeight'], width: 20, speed: value['paddleLeftSpeed']});
-        this.pongGame.pos.setPaddleRightOption({height: value['paddleRightHeight'], width: 20, speed: value['paddleRightSpeed']});
+        this.pongOptions.paddleLeft = {height: value['paddleLeftHeight'], width: 20, speed: value['paddleLeftSpeed']};
+        this.pongOptions.paddleRight = {height: value['paddleRightHeight'], width: 20, speed: value['paddleRightSpeed']};
       }
     );
   }
@@ -58,6 +60,7 @@ export class PongComponent implements OnInit {
 
   startGame()
   {
+    this.pongGame.pos.setOptions(this.pongOptions);
     this.pongGame.resetCanvas();
 
     if(this.interval) {

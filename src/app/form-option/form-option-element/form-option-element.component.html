@@ -1,8 +1,8 @@
 
-<div [formGroup]="form">
+<div [formGroup]="form" class="form-element-wrapper">
     <label *ngIf="option.type != 'radio'" [attr.for]="option.key">{{ option.label }}</label> <!-- Hide for radio as they have legend-->
 
-    <div [ngSwitch]="option.controlType">
+    <div [ngSwitch]="option.controlType" class="form-element-inner-wrapper">
 
         <input *ngSwitchCase="'input'" [formControlName]="option.key"
                 [id]="option.key" [type]="option.type" [min]="option.min" [max]="option.max" [step]="option.step"/>

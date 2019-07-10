@@ -1,17 +1,27 @@
-.errorMessage {
-    color: red;
-}
+.form-element-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
 
-input[type="text"],
-input[type="number"] {
-    height: 25px;
-}
+    .form-element-inner-wrapper {
+        flex-grow: 1;
+    }
 
-input[type="text"] {
-    min-width: 200px;
-}
+    label {
+        width: 150px;
+    }
 
-input[type="number"] {
-    min-width: 50px;
-    text-align: center;
+    input[type="text"],
+    input[type="number"] {
+        height: 25px;
+    }
+
+    input[type="text"] {
+        min-width: 200px;
+    }
+
+    input[type="number"] {
+        min-width: 50px;
+        text-align: center;
+    }
 }

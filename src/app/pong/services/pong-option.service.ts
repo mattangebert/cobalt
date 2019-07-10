@@ -6,11 +6,11 @@ interface PaddleOption {
   speed: number
 }
 
-interface PongOption {
+export interface PongOption {
   isPlayerOne: boolean,
   isPlayerTwo: boolean,
-  PaddleLeft: PaddleOption,
-  PaddleRight: PaddleOption
+  paddleLeft: PaddleOption,
+  paddleRight: PaddleOption
 }
 
 
@@ -34,11 +34,18 @@ export class PongOptionService {
     const pongOption = {
       isPlayerOne: this.getIsPlayerOne(),
       isPlayerTwo: this.getIsPlayerTwo(),
-      PaddleLeft: this.getPaddleLeftOption(),
-      PaddleRight: this.getPaddleRightOption()
+      paddleLeft: this.getPaddleLeftOption(),
+      paddleRight: this.getPaddleRightOption()
     }
 
     return pongOption;
+  }
+
+  setOptions(options: PongOption): void {
+    this.setIsPlayerOne(options.isPlayerOne);
+    this.setIsPlayerTwo(options.isPlayerTwo);
+    this.setPaddleLeftOption(options.paddleLeft);
+    this.setPaddleRightOption(options.paddleRight);
   }
 
   setIsPlayerOne(isPlayer: boolean): void {
