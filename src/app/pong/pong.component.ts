@@ -26,7 +26,7 @@ export class PongComponent implements OnInit {
   private controlStates: PongControlStates;
   private interval;
   private pongOptions: PongOption;
-
+  
   constructor(optionService: OptionService, pos: PongOptionService) {
     this.pongGame = new PongGame(this.height, this.width, pos);
     this.controlStates = { 
@@ -61,6 +61,7 @@ export class PongComponent implements OnInit {
   startGame()
   {
     this.pongGame.pos.setOptions(this.pongOptions);
+    this.pongGame.setGameRunning();
     this.pongGame.resetCanvas();
 
     if(this.interval) {
@@ -75,9 +76,17 @@ export class PongComponent implements OnInit {
 
   renderFrame(): void {
     if (this.pongGame.gameOver()) {
+      this.renderScore(); // render end score
+
       this.context.font = "30px Arial";
-      this.context.fillText("Game Over!", 50, 50);
-      //setTimeout(() => location.reload(), 500);
+      this.context.textAlign = "center";
+      this.context.fillText("Space bar to continue", this.width / 2, this.height - 80);
+      this.context.fillText("F5 for new Game", this.width / 2, this.height - 40);
+
+      this.context.font = "50px Arial";
+      this.context.fillText("Game Over!", this.width / 2, this.height / 2);
+
+      clearInterval(this.interval);
       return;
     }
 
@@ -87,6 +96,8 @@ export class PongComponent implements OnInit {
 
     // Set to white for game objects
     this.context.fillStyle = 'rgb(255,255,255)';
+
+    this.renderScore(); // render score before obbjects get drawn to be in background
 
     let bounds: Boundaries;
 
@@ -105,14 +116,25 @@ export class PongComponent implements OnInit {
     bounds = ballObj.getCollisionBoundaries();
     //this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
     
-    
     this.context.arc(bounds.left, bounds.top, 5, 0 ,2 * Math.PI)
     this.context.fill();
     this.context.beginPath();
 
-
     // Render next frame
     window.requestAnimationFrame(() => this.renderFrame());
+  }
+
+  private renderScore():void {
+    // erase old scoe
+    this.context.fillStyle = 'rgb(0,0,0)';
+    this.context.fillRect(this.width / 4, 0, this.width / 4 + this.width / 2, 50);
+
+    // write score
+    this.context.fillStyle = 'rgb(255,255,255)';
+    const score = this.pongGame.getScore();
+    this.context.font = "30px Arial";
+    this.context.textAlign = "center";
+    this.context.fillText(score.playerOne + " : " + score.playerTwo , this.width / 2, 50);
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -145,7 +167,7 @@ export class PongComponent implements OnInit {
     if ('ArrowDown' == event.code) {
       this.controlStates.controlTwo.downPressed = false;
     }
-    if ('Space' == event.code) {
+    if ('Space' == event.code && !this.pongGame.getGameRunning()) {
       this.startGame();
     }
   }

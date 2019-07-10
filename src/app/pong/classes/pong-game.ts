@@ -13,11 +13,18 @@ interface PongControlState {
     downPressed: boolean,
 }
 
+interface Score {
+    playerOne: number,
+    playerTwo: number
+}
+
 export class PongGame {
     public ball: Ball;
     public playerOnePaddle: Paddle;
     public playerTwoPaddle: Paddle;
     public pos: PongOptionService;
+    private score: Score
+    private gameRunning: boolean
 
     private height: number;
     private width: number;
@@ -32,6 +39,11 @@ export class PongGame {
         this.width = width;
         this.pos = pos;
         this.pos.initializeOptions();
+        this.score = {
+            playerOne: 0,
+            playerTwo: 0
+        };
+        this.gameRunning = false;
 
         this.resetCanvas();
     }
@@ -193,9 +205,35 @@ export class PongGame {
         
     }
 
-    gameOver(): boolean {
-        let collisionBoundaries = this.ball.getCollisionBoundaries();
+    getScore(): Score {
+        return this.score;
+    }
 
-        return collisionBoundaries.left <= 0 || collisionBoundaries.right >= this.width;
+    private updateScore(): void
+    {
+        if(!this.gameRunning) {
+            this.score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
+            this.score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0
+        }
+    }
+
+    getGameRunning(): boolean {
+        return this.gameRunning;
+    }
+
+    setGameRunning(): void {
+        this.gameRunning = true;
+    }
+
+    gameOver(): boolean {
+        const collisionBoundaries = this.ball.getCollisionBoundaries();
+        const condition = collisionBoundaries.left <= 0 || collisionBoundaries.right >= this.width;
+
+        if(condition) {
+            this.gameRunning = false
+            this.updateScore();
+        }
+
+        return condition
     }
 }

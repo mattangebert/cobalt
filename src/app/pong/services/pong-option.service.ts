@@ -26,8 +26,8 @@ export class PongOptionService {
   initializeOptions() {
     this.setIsPlayerOne(true);
     this.setIsPlayerTwo(false);
-    this.setPaddleLeftOption({height: 100, width: 20, speed: 1.5});
-    this.setPaddleRightOption({height: 100, width: 20, speed: 1.5});
+    this.setPaddleLeftOption({height: 100, width: 20, speed: 2.0});
+    this.setPaddleRightOption({height: 100, width: 20, speed: 2.0});
   }
 
   getOptions(): PongOption {
