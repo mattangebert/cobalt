@@ -1,15 +1,28 @@
 import { Injectable } from '@angular/core';
 import { OptionBase } from '../model/option-base';
-import { OptionTextbox } from '../model/option-textbox';
+import { OptionInput } from '../model/option-input';
 import { OptionSelect } from '../model/option-select';
 
 @Injectable()
 export class OptionService {
 
+  options: OptionBase<any>[] = [];
   // TODO outsource to DB
   // TODO make ansynchronous
 
-  getOptions() {
+  constructor(){
+    this.setPongoptions();
+  }
+
+  setOptions(options: OptionBase<any>[]) {
+    this.options = options;
+  }
+
+  getOptions(): OptionBase<any>[] {
+    return this.options;
+  }
+
+  private setPongoptions(): void {
     let options: OptionBase<any>[] = [
 
       new OptionSelect({
@@ -38,9 +51,27 @@ export class OptionService {
         order: 2
       }),
 
-      
+      new OptionInput({
+        key: 'paddleLeftHeight',
+        label: 'Left Paddel Height',
+        type: 'number',
+        value: 100,
+        min: 10,
+        max: 600,
+        order: 3
+      }),
+
+      new OptionInput({
+        key: 'paddleRightHeight',
+        label: 'Right Paddel Height',
+        type: 'number',
+        value: 100,
+        min: 10,
+        max: 600,
+        order: 4
+      }),
     ];
 
-    return options.sort((a, b) => a.order - b.order);
+    this.setOptions(options.sort((a, b) => a.order - b.order));
   }
 }

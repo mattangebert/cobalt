@@ -4,8 +4,8 @@
 
     <div [ngSwitch]="option.controlType">
 
-        <input *ngSwitchCase="'textbox'" [formControlName]="option.key"
-                [id]="option.key" [type]="option.type"/>
+        <input *ngSwitchCase="'input'" [formControlName]="option.key"
+                [id]="option.key" [type]="option.type" [min]="option.min" [max]="option.max"/>
 
         <input *ngSwitchCase="'checkbox'" [formControlName]="option.key" type="checkbox"
                 [id]="option.key"/>

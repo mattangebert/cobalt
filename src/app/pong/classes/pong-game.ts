@@ -1,6 +1,7 @@
 import { Ball } from './ball';
 import { Paddle } from './paddle';
 import { Boundaries } from '../../classes/moveable-object';
+import { PongOptionService } from '../services/pong-option.service';
 
 export interface PongControlStates {
     controlOne: PongControlState,
@@ -12,46 +13,37 @@ interface PongControlState {
     downPressed: boolean,
 }
 
-export interface PongOptions {
-    playerOne: {
-        isPlayer: boolean,
-    },
-    playerTwo: {
-        isPlayer: boolean,
-    }
-}
-
 export class PongGame {
     public ball: Ball;
     public playerOnePaddle: Paddle;
     public playerTwoPaddle: Paddle;
+    public pos: PongOptionService;
 
     private height: number;
     private width: number;
     private offsets = { playerOne: 0, playerTwo: 0, isPositive: true };
-    private options: PongOptions = { 
-        playerOne: {
-            isPlayer: true
-        },
-        playerTwo: {
-            isPlayer: false
-        }
-    };
 
     constructor(
         height: number,
-        width: number
+        width: number,
+        pos: PongOptionService
     ){
         this.height = height;
         this.width = width;
+        this.pos = pos;
+        this.pos.initializeOptions();
 
         this.resetCanvas();
     }
 
     resetCanvas() {
         this.ball =  new Ball(15, 15, 1.9, { x: this.height / 2, y: this.width / 2 }, { x: 1, y: 1 });
-        this.playerOnePaddle =  new Paddle(100, 20, 1.5, {x: 50, y: this.height / 2 });
-        this.playerTwoPaddle =  new Paddle(100, 20, 1.5, {x: this.width - 50, y: this.height / 2 });
+
+        const paddleLeftOption = this.pos.getPaddleLeftOption();
+        const paddleRightOption = this.pos.getPaddleRightOption();
+
+        this.playerOnePaddle =  new Paddle(paddleLeftOption.height, paddleLeftOption.width, paddleLeftOption.speed, {x: 50, y: this.height / 2 });
+        this.playerTwoPaddle =  new Paddle(paddleRightOption.height, paddleRightOption.width, paddleRightOption.speed, {x: this.width - 50, y: this.height / 2 });
     }
 
     tick(controlStates: PongControlStates): void {
@@ -62,39 +54,35 @@ export class PongGame {
         this.checkCollisions();
     }
 
-    setOptions(options: PongOptions) {
-        this.options = options;
-    }
-
     private handleMovement(controlStates: PongControlStates) {
         this.getOffsets();
 
         // single Player
-        if (this.options.playerOne.isPlayer !== this.options.playerTwo.isPlayer) {
+        if (this.pos.getIsPlayerOne() !== this.pos.getIsPlayerTwo()) {
             let mergedControll: PongControlState = {upPressed: false, downPressed: false};
 
             mergedControll.upPressed = controlStates.controlOne.upPressed || controlStates.controlTwo.upPressed;
             mergedControll.downPressed = controlStates.controlOne.downPressed || controlStates.controlTwo.downPressed;
             
-            if (this.options.playerOne.isPlayer) {
+            if (this.pos.getIsPlayerOne()) {
                 this.handleControl(mergedControll, this.playerOnePaddle);
             }
-            if (this.options.playerTwo.isPlayer) {
+            if (this.pos.getIsPlayerTwo()) {
                 this.handleControl(mergedControll, this.playerTwoPaddle);
             }
         }
 
         // multiplayer
-        if (this.options.playerOne.isPlayer && this.options.playerTwo.isPlayer) {
+        if (this.pos.getIsPlayerOne() && this.pos.getIsPlayerTwo()) {
             this.handleControl(controlStates.controlOne, this.playerOnePaddle);
             this.handleControl(controlStates.controlTwo, this.playerTwoPaddle);
         }
 
         // computer
-        if (!this.options.playerOne.isPlayer) {
+        if (!this.pos.getIsPlayerOne()) {
             this.movePaddle(this.playerOnePaddle, this.offsets.playerOne);
         }
-        if (!this.options.playerTwo.isPlayer) {
+        if (!this.pos.getIsPlayerTwo()) {
             this.movePaddle(this.playerTwoPaddle, this.offsets.playerTwo);
         }
     }

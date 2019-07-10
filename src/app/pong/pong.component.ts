@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { PongGame, PongControlStates, PongOptions } from './classes/pong-game';
+import { PongGame, PongControlStates } from './classes/pong-game';
 import { Boundaries } from '../classes/moveable-object';
 import { OptionService } from '../form-option/service/option.service';
 import { FormOptionComponent } from '../form-option/form-option.component';
-import { TouchSequence } from 'selenium-webdriver';
+import { PongOptionService } from './services/pong-option.service';
 
 @Component({
   selector: 'app-pong',
   templateUrl: './pong.component.html',
   styleUrls: ['./pong.component.scss'],
-  providers: [ OptionService ]
+  providers: [ OptionService, PongOptionService ]
 })
 export class PongComponent implements OnInit {
   @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef
@@ -26,8 +26,8 @@ export class PongComponent implements OnInit {
   private controlStates: PongControlStates;
   private interval;
 
-  constructor(optionService : OptionService) {
-    this.pongGame = new PongGame(this.height, this.width);
+  constructor(optionService: OptionService, pos: PongOptionService) {
+    this.pongGame = new PongGame(this.height, this.width, pos);
     this.controlStates = { 
       controlOne: {upPressed: false, downPressed: false}, 
       controlTwo: {upPressed: false, downPressed: false}, 
@@ -42,16 +42,10 @@ export class PongComponent implements OnInit {
   ngAfterViewInit() {
     this.form.getForm().valueChanges.forEach(
       (value: string) => {
-        const options: PongOptions = {
-          playerOne: {
-            isPlayer: value['player1'] === 'player'
-          },
-          playerTwo: {
-            isPlayer: value['player2'] === 'player'
-          }
-        }
-
-        this.pongGame.setOptions(options);
+        this.pongGame.pos.setIsPlayerOne(value['player1'] === 'player');
+        this.pongGame.pos.setIsPlayerTwo(value['player2'] === 'player');
+        this.pongGame.pos.setPaddleLeftOption({height: value['paddleLeftHeight'], width: 20, speed: 1.5});
+        this.pongGame.pos.setPaddleRightOption({height: value['paddleRightHeight'], width: 20, speed: 1.5});
       }
     );
   }
@@ -63,9 +57,10 @@ export class PongComponent implements OnInit {
 
   startGame()
   {
+    this.pongGame.resetCanvas();
+
     if(this.interval) {
       clearInterval(this.interval);
-      this.pongGame.resetCanvas();
       this.initialiseGame();
     }
      
@@ -118,37 +113,36 @@ export class PongComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if ('w' == event.key) {
+    if ('KeyW' == event.code) {
       this.controlStates.controlOne.upPressed = true;
     }
-    if ('s' == event.key) {
+    if ('KeyS' == event.code) {
       this.controlStates.controlOne.downPressed = true;
     }
-    if ('ArrowUp' == event.key) {
+    if ('ArrowUp' == event.code) {
       this.controlStates.controlTwo.upPressed = true;
     }
-    if ('ArrowDown' == event.key) {
+    if ('ArrowDown' == event.code) {
       this.controlStates.controlTwo.downPressed = true;
     }
   }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent2(event: KeyboardEvent) {
-    if ('w' == event.key) {
+    if ('KeyW' == event.code) {
       this.controlStates.controlOne.upPressed = false;
     }
-    if ('s' == event.key) {
+    if ('KeyS' == event.code) {
       this.controlStates.controlOne.downPressed = false;
     }
-    if ('ArrowUp' == event.key) {
+    if ('ArrowUp' == event.code) {
       this.controlStates.controlTwo.upPressed = false;
     }
-    if ('ArrowDown' == event.key) {
+    if ('ArrowDown' == event.code) {
       this.controlStates.controlTwo.downPressed = false;
     }
+    if ('Space' == event.code) {
+      this.startGame();
+    }
   }
-
-  onClickSubmit(formData) {
-    console.log(formData);
- }
 }

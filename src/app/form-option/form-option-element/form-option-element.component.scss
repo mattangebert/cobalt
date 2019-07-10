@@ -1,3 +1,17 @@
 .errorMessage {
     color: red;
 }
+
+input[type="text"],
+input[type="number"] {
+    height: 25px;
+}
+
+input[type="text"] {
+    min-width: 200px;
+}
+
+input[type="number"] {
+    min-width: 50px;
+    text-align: center;
+}
