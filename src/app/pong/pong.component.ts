@@ -65,7 +65,7 @@ export class PongComponent implements OnInit {
   {
     if(this.interval) {
       clearInterval(this.interval);
-      this.pongGame.reset();
+      this.pongGame.resetCanvas();
       this.initialiseGame();
     }
      

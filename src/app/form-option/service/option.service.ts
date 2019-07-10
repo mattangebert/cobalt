@@ -17,10 +17,10 @@ export class OptionService {
         label: 'Player One',
         type: 'radio',
         required: true,
-        value: 'Player',
+        value: 'player',
         options: [
-          { key: 'player', value: 'Player' },
-          { key: 'computer', value: 'Computer' }
+          { key: 'player', value: 'player' },
+          { key: 'computer', value: 'computer' }
         ],
         order: 1
       }),
@@ -30,10 +30,10 @@ export class OptionService {
         label: 'Player Two',
         type: 'radio',
         required: true,
-        value: 'Computer',
+        value: 'computer',
         options: [
-          { key: 'player', value: 'Player' },
-          { key: 'computer', value: 'Computer' }
+          { key: 'player', value: 'player' },
+          { key: 'computer', value: 'computer' }
         ],
         order: 2
       }),

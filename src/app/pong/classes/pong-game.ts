@@ -45,17 +45,14 @@ export class PongGame {
         this.height = height;
         this.width = width;
 
-        this.ball =  new Ball(15, 15, 1.9, { x: height / 2, y: width / 2 }, { x: 1, y: 1 });
-        this.playerOnePaddle =  new Paddle(100, 20, 2, {x: 50, y: height / 2 });
-        this.playerTwoPaddle =  new Paddle(100, 20, 2, {x: width - 50, y: height / 2 });
+        this.resetCanvas();
     }
 
-    reset() {
+    resetCanvas() {
         this.ball =  new Ball(15, 15, 1.9, { x: this.height / 2, y: this.width / 2 }, { x: 1, y: 1 });
         this.playerOnePaddle =  new Paddle(100, 20, 1.5, {x: 50, y: this.height / 2 });
         this.playerTwoPaddle =  new Paddle(100, 20, 1.5, {x: this.width - 50, y: this.height / 2 });
     }
-
 
     tick(controlStates: PongControlStates): void {
         this.ball.move();
