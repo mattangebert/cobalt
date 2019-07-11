@@ -49,13 +49,20 @@ export class PongGame {
     }
 
     resetCanvas() {
-        this.ball =  new Ball(15, 15, 1.9, { x: this.height / 2, y: this.width / 2 }, { x: 1, y: 1 });
-
         const paddleLeftOption = this.pos.getPaddleLeftOption();
         const paddleRightOption = this.pos.getPaddleRightOption();
 
         this.playerOnePaddle =  new Paddle(paddleLeftOption.height, paddleLeftOption.width, paddleLeftOption.speed, {x: 50, y: this.height / 2 });
         this.playerTwoPaddle =  new Paddle(paddleRightOption.height, paddleRightOption.width, paddleRightOption.speed, {x: this.width - 50, y: this.height / 2 });
+
+        // todo speed or behavour adjustment for ai difficult
+
+        let speed = 2;
+        if (true) { // todo option adjusted speed
+            speed = Math.min(paddleLeftOption.speed, paddleRightOption.speed) * ((this.width - 100) / this.height);
+            //speed = (speed / 20) * 21;
+        }
+        this.ball =  new Ball(15, 15, speed, { x: this.height / 2, y: this.width / 2 }, { x: 1, y: 1 });
     }
 
     tick(controlStates: PongControlStates): void {

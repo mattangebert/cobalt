@@ -24,7 +24,8 @@ export class PongComponent implements OnInit {
   private pongGame: PongGame;
   private ticksPerSecond: number = 60;
   private controlStates: PongControlStates;
-  private interval;
+  private interval: NodeJS.Timer;
+  private start: any;
   private pongOptions: PongOption;
   
   constructor(optionService: OptionService, pos: PongOptionService) {
@@ -60,6 +61,7 @@ export class PongComponent implements OnInit {
 
   startGame()
   {
+    this.start = new Date();
     this.pongGame.pos.setOptions(this.pongOptions);
     this.pongGame.setGameRunning();
     this.pongGame.resetCanvas();
@@ -68,7 +70,6 @@ export class PongComponent implements OnInit {
       clearInterval(this.interval);
       this.initialiseGame();
     }
-     
     this.interval = setInterval(() => {
       this.pongGame.tick(this.controlStates);
     }, 1 / this.ticksPerSecond);
@@ -77,14 +78,7 @@ export class PongComponent implements OnInit {
   renderFrame(): void {
     if (this.pongGame.gameOver()) {
       this.renderScore(); // render end score
-
-      this.context.font = "30px Arial";
-      this.context.textAlign = "center";
-      this.context.fillText("Space bar to continue", this.width / 2, this.height - 80);
-      this.context.fillText("F5 for new Game", this.width / 2, this.height - 40);
-
-      this.context.font = "50px Arial";
-      this.context.fillText("Game Over!", this.width / 2, this.height / 2);
+      this.renderGameOver(); // render GameOver info
 
       clearInterval(this.interval);
       return;
@@ -127,7 +121,7 @@ export class PongComponent implements OnInit {
   private renderScore():void {
     // erase old scoe
     this.context.fillStyle = 'rgb(0,0,0)';
-    this.context.fillRect(this.width / 4, 0, this.width / 4 + this.width / 2, 50);
+    this.context.fillRect(this.width / 6, 0, (this.width / 6) * 4, 50);
 
     // write score
     this.context.fillStyle = 'rgb(255,255,255)';
@@ -135,6 +129,21 @@ export class PongComponent implements OnInit {
     this.context.font = "30px Arial";
     this.context.textAlign = "center";
     this.context.fillText(score.playerOne + " : " + score.playerTwo , this.width / 2, 50);
+  }
+
+  private renderGameOver()
+  {
+      this.context.fillStyle = 'rgb(255,255,255)';
+      this.context.font = "30px Arial";
+      this.context.textAlign = "center";
+      this.context.fillText("Space bar to continue", this.width / 2, this.height - 80);
+      this.context.fillText("F5 for new Game", this.width / 2, this.height - 40);
+
+      this.context.font = "50px Arial";
+      this.context.fillText("Game Over!", this.width / 2, this.height / 2);
+      this.context.font = "20px Arial";
+      const end = new Date();
+      this.context.fillText(((end.getTime() - this.start.getTime()) / 1000) + "s", this.width / 2, this.height / 2 + 30);
   }
 
   @HostListener('window:keydown', ['$event'])
