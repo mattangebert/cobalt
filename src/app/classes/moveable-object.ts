@@ -15,7 +15,7 @@ export abstract class MoveableObject {
         private height: number,
         private width: number,
         private maxSpeed: number,
-        private position: Point2D ){
+        private position: Point2D ) {
 
     }
 
@@ -34,7 +34,7 @@ export abstract class MoveableObject {
             bottom: this.position.y + this.height / 2,
             right: this.position.x + this.width / 2,
             left: this.position.x - this.width / 2,
-        }
+        };
     }
 
     getWidth(): number {

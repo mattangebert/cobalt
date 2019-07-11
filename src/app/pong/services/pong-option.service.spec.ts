@@ -1,7 +1,5 @@
-import { TestBed } from '@angular/core/testing';
 
-import { PongOptionService } from './pong-option.service';
-
+/*
 describe('PongOptionService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
@@ -10,3 +8,4 @@ describe('PongOptionService', () => {
     expect(service).toBeTruthy();
   });
 });
+*/

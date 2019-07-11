@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { OptionControlService } from './service/option-control.service';
+import { toFormGroup } from './service/option-control-functions';
 import { OptionBase } from './model/option-base';
 import { FormGroup } from '@angular/forms';
 
@@ -7,7 +7,6 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-form-option',
   templateUrl: './form-option.component.html',
   styleUrls: ['./form-option.component.scss'],
-  providers: [ OptionControlService ]
 })
 export class FormOptionComponent implements OnInit {
 
@@ -15,18 +14,18 @@ export class FormOptionComponent implements OnInit {
   form: FormGroup;
   payLoad = '';
 
-  constructor(private ocs: OptionControlService) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.form = this.ocs.toFormGroup(this.options);
+  ngOnInit(): void {
+    this.form = toFormGroup(this.options);
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.payLoad = JSON.stringify(this.form.value);
   }
 
   getForm(): FormGroup {
-    return this.form
+    return this.form;
   }
 
 }

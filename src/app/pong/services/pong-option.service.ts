@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
 
 interface PaddleOption {
-  height: number,
-  width: number,
-  speed: number
+  height: number;
+  width: number;
+  speed: number;
 }
 
 export interface PongOption {
-  isPlayerOne: boolean,
-  isPlayerTwo: boolean,
-  paddleLeft: PaddleOption,
-  paddleRight: PaddleOption
+  isPlayerOne: boolean;
+  isPlayerTwo: boolean;
+  paddleLeft: PaddleOption;
+  paddleRight: PaddleOption;
 }
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class PongOptionService {
-  private isPlayerOne: boolean;
-  private isPlayerTwo: boolean;
-  private paddleLeftOption: PaddleOption;
-  private paddleRightOption: PaddleOption;
+  isPlayerOne: boolean;
+  isPlayerTwo: boolean;
+  paddleLeftOption: PaddleOption;
+  paddleRightOption: PaddleOption;
 
   constructor() {}
 
-  initializeOptions() {
+  initializeOptions(): void {
     this.setIsPlayerOne(true);
     this.setIsPlayerTwo(false);
     this.setPaddleLeftOption({height: 100, width: 20, speed: 2.0});
@@ -36,7 +37,7 @@ export class PongOptionService {
       isPlayerTwo: this.getIsPlayerTwo(),
       paddleLeft: this.getPaddleLeftOption(),
       paddleRight: this.getPaddleRightOption()
-    }
+    };
 
     return pongOption;
   }

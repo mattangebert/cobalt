@@ -8,8 +8,8 @@ export class Ball extends MoveableObject {
         width: number,
         maxSpeed: number,
         position: Point2D,
-        speedRatio: Point2D 
-    ){
+        speedRatio: Point2D
+    ) {
         super(height, width, maxSpeed, position);
         this.speedRatio = speedRatio;
     }

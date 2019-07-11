@@ -3,18 +3,20 @@ import { OptionBase } from '../model/option-base';
 import { OptionInput } from '../model/option-input';
 import { OptionSelect } from '../model/option-select';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class OptionService {
 
   options: OptionBase<any>[] = [];
   // TODO outsource to DB
   // TODO make ansynchronous
 
-  constructor(){
+  constructor() {
     this.setPongoptions();
   }
 
-  setOptions(options: OptionBase<any>[]) {
+  setOptions(options: OptionBase<any>[]): void {
     this.options = options;
   }
 
@@ -23,7 +25,7 @@ export class OptionService {
   }
 
   private setPongoptions(): void {
-    let options: OptionBase<any>[] = [
+    const options: OptionBase<any>[] = [
 
       new OptionSelect({
         key: 'player1',

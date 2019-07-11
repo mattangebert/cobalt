@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
 import { PongGame, PongControlStates } from './classes/pong-game';
 import { Boundaries } from '../classes/moveable-object';
 import { OptionService } from '../form-option/service/option.service';
@@ -9,40 +9,39 @@ import { PongOptionService, PongOption } from './services/pong-option.service';
   selector: 'app-pong',
   templateUrl: './pong.component.html',
   styleUrls: ['./pong.component.scss'],
-  providers: [ OptionService, PongOptionService ]
 })
-export class PongComponent implements OnInit {
-  @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef
+export class PongComponent implements OnInit, AfterViewInit {
+  @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef;
   @ViewChild('optionForm', { static: true}) form: FormOptionComponent;
 
   options: any[];
 
-  public width: number = 800;
-  public height: number = 600;
+  public width = 800;
+  public height = 600;
 
   private context: CanvasRenderingContext2D;
   private pongGame: PongGame;
-  private ticksPerSecond: number = 60;
+  private ticksPerSecond = 60;
   private controlStates: PongControlStates;
   private interval: NodeJS.Timer;
   private start: any;
   private pongOptions: PongOption;
-  
+
   constructor(optionService: OptionService, pos: PongOptionService) {
     this.pongGame = new PongGame(this.height, this.width, pos);
-    this.controlStates = { 
-      controlOne: {upPressed: false, downPressed: false}, 
-      controlTwo: {upPressed: false, downPressed: false}, 
-    } 
+    this.controlStates = {
+      controlOne: {upPressed: false, downPressed: false},
+      controlTwo: {upPressed: false, downPressed: false},
+    };
     this.options = optionService.getOptions();
     this.pongOptions = pos.getOptions();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initialiseGame();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.form.getForm().valueChanges.forEach(
       (value: string) => {
         this.pongOptions.isPlayerOne = value['player1'] === 'player';
@@ -54,19 +53,18 @@ export class PongComponent implements OnInit {
     );
   }
 
-  initialiseGame() {
+  initialiseGame(): void {
     this.context = this.canvasElement.nativeElement.getContext('2d');
     this.renderFrame();
   }
 
-  startGame()
-  {
+  startGame(): void {
     this.start = new Date();
     this.pongGame.pos.setOptions(this.pongOptions);
     this.pongGame.setGameRunning();
     this.pongGame.resetCanvas();
 
-    if(this.interval) {
+    if (this.interval) {
       clearInterval(this.interval);
       this.initialiseGame();
     }
@@ -81,6 +79,7 @@ export class PongComponent implements OnInit {
       this.renderGameOver(); // render GameOver info
 
       clearInterval(this.interval);
+
       return;
     }
 
@@ -96,21 +95,21 @@ export class PongComponent implements OnInit {
     let bounds: Boundaries;
 
     // Draw player paddle
-    let paddleObj = this.pongGame.playerOnePaddle;
+    const paddleObj = this.pongGame.playerOnePaddle;
     bounds = paddleObj.getCollisionBoundaries();
     this.context.fillRect(bounds.left, bounds.top, paddleObj.getWidth(), paddleObj.getHeight());
 
     // Draw enemy paddle
-    let enemyObj = this.pongGame.playerTwoPaddle;
+    const enemyObj = this.pongGame.playerTwoPaddle;
     bounds = enemyObj.getCollisionBoundaries();
     this.context.fillRect(bounds.left, bounds.top, enemyObj.getWidth(), enemyObj.getHeight());
 
     // Draw ball
-    let ballObj = this.pongGame.ball;
+    const ballObj = this.pongGame.ball;
     bounds = ballObj.getCollisionBoundaries();
-    //this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
-    
-    this.context.arc(bounds.left, bounds.top, 5, 0 ,2 * Math.PI)
+    // this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
+
+    this.context.arc(bounds.left, bounds.top, 5, 0 , 2 * Math.PI);
     this.context.fill();
     this.context.beginPath();
 
@@ -118,7 +117,7 @@ export class PongComponent implements OnInit {
     window.requestAnimationFrame(() => this.renderFrame());
   }
 
-  private renderScore():void {
+  private renderScore(): void {
     // erase old scoe
     this.context.fillStyle = 'rgb(0,0,0)';
     this.context.fillRect(this.width / 6, 0, (this.width / 6) * 4, 50);
@@ -126,57 +125,56 @@ export class PongComponent implements OnInit {
     // write score
     this.context.fillStyle = 'rgb(255,255,255)';
     const score = this.pongGame.getScore();
-    this.context.font = "30px Arial";
-    this.context.textAlign = "center";
-    this.context.fillText(score.playerOne + " : " + score.playerTwo , this.width / 2, 50);
+    this.context.font = '30px Arial';
+    this.context.textAlign = 'center';
+    this.context.fillText(score.playerOne + ' : ' + score.playerTwo , this.width / 2, 50);
   }
 
-  private renderGameOver()
-  {
+  private renderGameOver(): void {
       this.context.fillStyle = 'rgb(255,255,255)';
-      this.context.font = "30px Arial";
-      this.context.textAlign = "center";
-      this.context.fillText("Space bar to continue", this.width / 2, this.height - 80);
-      this.context.fillText("F5 for new Game", this.width / 2, this.height - 40);
+      this.context.font = '30px Arial';
+      this.context.textAlign = 'center';
+      this.context.fillText('Space bar to continue', this.width / 2, this.height - 80);
+      this.context.fillText('F5 for new Game', this.width / 2, this.height - 40);
 
-      this.context.font = "50px Arial";
-      this.context.fillText("Game Over!", this.width / 2, this.height / 2);
-      this.context.font = "20px Arial";
+      this.context.font = '50px Arial';
+      this.context.fillText('Game Over!', this.width / 2, this.height / 2);
+      this.context.font = '20px Arial';
       const end = new Date();
-      this.context.fillText(((end.getTime() - this.start.getTime()) / 1000) + "s", this.width / 2, this.height / 2 + 30);
+      this.context.fillText(((end.getTime() - this.start.getTime()) / 1000) + 's', this.width / 2, this.height / 2 + 30);
   }
 
   @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if ('KeyW' == event.code) {
+  keyEvent(event: KeyboardEvent): void {
+    if ('KeyW' === event.code) {
       this.controlStates.controlOne.upPressed = true;
     }
-    if ('KeyS' == event.code) {
+    if ('KeyS' === event.code) {
       this.controlStates.controlOne.downPressed = true;
     }
-    if ('ArrowUp' == event.code) {
+    if ('ArrowUp' === event.code) {
       this.controlStates.controlTwo.upPressed = true;
     }
-    if ('ArrowDown' == event.code) {
+    if ('ArrowDown' === event.code) {
       this.controlStates.controlTwo.downPressed = true;
     }
   }
 
   @HostListener('window:keyup', ['$event'])
-  keyEvent2(event: KeyboardEvent) {
-    if ('KeyW' == event.code) {
+  keyEvent2(event: KeyboardEvent): void {
+    if ('KeyW' === event.code) {
       this.controlStates.controlOne.upPressed = false;
     }
-    if ('KeyS' == event.code) {
+    if ('KeyS' === event.code) {
       this.controlStates.controlOne.downPressed = false;
     }
-    if ('ArrowUp' == event.code) {
+    if ('ArrowUp' === event.code) {
       this.controlStates.controlTwo.upPressed = false;
     }
-    if ('ArrowDown' == event.code) {
+    if ('ArrowDown' === event.code) {
       this.controlStates.controlTwo.downPressed = false;
     }
-    if ('Space' == event.code && !this.pongGame.getGameRunning()) {
+    if ('Space' === event.code && !this.pongGame.getGameRunning()) {
       this.startGame();
     }
   }

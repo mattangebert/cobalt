@@ -1,5 +1,5 @@
 import { Component, Input,  } from '@angular/core';
-import { FormGroup }        from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { OptionBase } from '../model/option-base';
 
 @Component({
@@ -11,7 +11,7 @@ export class FormOptionElementComponent {
   @Input() option: OptionBase<any>;
   @Input() form: FormGroup;
 
-  get isValid() {
+  get isValid(): boolean {
     return this.form.controls[this.option.key].valid;
   }
 }

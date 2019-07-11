@@ -8,7 +8,7 @@ export class Paddle extends MoveableObject {
         width: number,
         maxSpeed: number,
         position: Point2D,
-    ){
+    ) {
         super(height, width, maxSpeed, position);
         this.speedRatio = { x: 0, y: 0};
     }
@@ -18,7 +18,7 @@ export class Paddle extends MoveableObject {
             return;
         }
 
-        this.speedRatio.y = Math.min(1, this.speedRatio.y + ratioChange)
+        this.speedRatio.y = Math.min(1, this.speedRatio.y + ratioChange);
         this.move();
     }
 
@@ -27,7 +27,7 @@ export class Paddle extends MoveableObject {
             return;
         }
 
-        this.speedRatio.y = Math.max(-1, this.speedRatio.y - ratioChange)
+        this.speedRatio.y = Math.max(-1, this.speedRatio.y - ratioChange);
         this.move();
     }
 

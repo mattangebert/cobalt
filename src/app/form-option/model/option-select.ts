@@ -11,7 +11,7 @@ export class OptionSelect extends OptionBase<string> {
         this.options = options['options'] || [];
         this.type = options['type'] || '';
 
-        if (!this.options.find((opt) => { return opt.value === this.value; })) {
+        if (!this.options.find((opt) => opt.value === this.value)) {
             this.value = null;
         }
     }

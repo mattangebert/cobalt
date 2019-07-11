@@ -8,7 +8,7 @@ export class OptionInput extends OptionBase<string> {
     step: number;
 
     constructor(options: {} = {}) {
-        super(options)
+        super(options);
         this.type = options['type'] || '';
 
         if (this.type === 'number') {
