@@ -16,14 +16,6 @@ export class OptionService {
     this.setPongoptions();
   }
 
-  setOptions(options: OptionBase<any>[]): void {
-    this.options = options;
-  }
-
-  getOptions(): OptionBase<any>[] {
-    return this.options;
-  }
-
   private setPongoptions(): void {
     const options: OptionBase<any>[] = [
 
@@ -96,6 +88,6 @@ export class OptionService {
       }),
     ];
 
-    this.setOptions(options.sort((a, b) => a.order - b.order));
+    this.options = options.sort((a, b) => a.order - b.order);
   }
 }

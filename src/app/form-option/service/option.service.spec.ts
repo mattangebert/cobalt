@@ -1,5 +1,7 @@
+import { OptionService } from './option.service';
+import { TestBed } from '@angular/core/testing';
 
-/*
+
 describe('OptionService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
@@ -8,4 +10,4 @@ describe('OptionService', () => {
     expect(service).toBeTruthy();
   });
 });
-*/
+

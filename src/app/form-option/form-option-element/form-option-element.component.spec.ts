@@ -4,8 +4,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { OptionInput } from '../model/option-input';
 import { toFormGroup } from '../service/option-control-functions';
 
-describe
-('FormOptionElementComponent', () => {
+describe('FormOptionElementComponent', () => {
   let component: FormOptionElementComponent;
   let fixture: ComponentFixture<FormOptionElementComponent>;
 
@@ -38,5 +37,9 @@ describe
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should return true', () => {
+    expect(component.isValid).toBeTruthy();
   });
 });

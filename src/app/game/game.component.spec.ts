@@ -1,5 +1,7 @@
+import { GameComponent } from './game.component';
+import { ComponentFixture, async, TestBed } from '@angular/core/testing';
 
-/*
+
 describe('GameComponent', () => {
   let component: GameComponent;
   let fixture: ComponentFixture<GameComponent>;
@@ -21,4 +23,4 @@ describe('GameComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-*/
+

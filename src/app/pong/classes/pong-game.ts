@@ -25,6 +25,7 @@ export class PongGame {
     public pos: PongOptionService;
     private score: Score;
     private gameRunning: boolean;
+    private toggle: boolean;
 
     private height: number;
     private width: number;
@@ -44,6 +45,7 @@ export class PongGame {
             playerTwo: 0
         };
         this.gameRunning = false;
+        this.toggle = false;
 
         this.resetCanvas();
     }
@@ -72,7 +74,13 @@ export class PongGame {
             speed = Math.min(paddleLeftOption.speed, paddleRightOption.speed) * ((this.width - 100) / this.height);
             // speed = (speed / 20) * 21;
         }
-        this.ball =  new Ball(15, 15, speed, { x: this.height / 2, y: this.width / 2 }, { x: 1, y: 1 });
+
+        this.ball =  new Ball(15, 15, speed, { x: this.width / 2, y: this.height / 2 }, { x: 1, y: 0 });
+        if (this.toggle) {
+            this.ball =  new Ball(15, 15, speed,
+                { x: this.width / 2, y: this.height / 2}, { x: -1, y: 0 });
+        }
+        this.toggle = !this.toggle;
     }
 
     tick(controlStates: PongControlStates): void {

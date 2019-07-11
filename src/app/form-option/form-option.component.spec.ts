@@ -1,12 +1,17 @@
+import { FormOptionComponent } from './form-option.component';
+import { ComponentFixture, async, TestBed } from '@angular/core/testing';
+import { OptionInput } from './model/option-input';
+import { FormOptionElementComponent } from './form-option-element/form-option-element.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-/*
 describe('FormOptionComponent', () => {
   let component: FormOptionComponent;
   let fixture: ComponentFixture<FormOptionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormOptionComponent ]
+      declarations: [ FormOptionComponent, FormOptionElementComponent ],
+      imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
   }));
@@ -15,10 +20,21 @@ describe('FormOptionComponent', () => {
     fixture = TestBed.createComponent(FormOptionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    const option = new OptionInput({
+      key: 'paddleLeftHeight',
+      label: 'Left Paddel Height',
+      type: 'number',
+      value: 100,
+      min: 10,
+      max: 600,
+      order: 3
+    });
+
+    component.options = [option];
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
-*/

@@ -12,7 +12,7 @@ import { PongOptionService, PongOption } from './services/pong-option.service';
 })
 export class PongComponent implements OnInit, AfterViewInit {
   @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef;
-  @ViewChild('optionForm', { static: true}) form: FormOptionComponent;
+  @ViewChild('optionForm', { static: true}) formOptionComp: FormOptionComponent;
 
   options: any[];
 
@@ -33,7 +33,7 @@ export class PongComponent implements OnInit, AfterViewInit {
       controlOne: {upPressed: false, downPressed: false},
       controlTwo: {upPressed: false, downPressed: false},
     };
-    this.options = optionService.getOptions();
+    this.options = optionService.options;
     this.pongOptions = pos.getOptions();
   }
 
@@ -42,7 +42,7 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.form.getForm().valueChanges.forEach(
+    this.formOptionComp.form.valueChanges.forEach(
       (value: string) => {
         this.pongOptions.isPlayerOne = value['player1'] === 'player';
         this.pongOptions.isPlayerTwo = value['player2'] === 'player';
