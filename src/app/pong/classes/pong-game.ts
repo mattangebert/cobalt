@@ -2,6 +2,7 @@ import { Ball } from './ball';
 import { Paddle } from './paddle';
 import { Boundaries } from '../../classes/moveable-object';
 import { PongOptionService } from '../services/pong-option.service';
+import { OnInit } from '@angular/core';
 
 export interface PongControlStates {
     controlOne: PongControlState;
@@ -19,12 +20,12 @@ interface Score {
 }
 
 export class PongGame {
-    public ball: Ball;
-    public playerOnePaddle: Paddle;
-    public playerTwoPaddle: Paddle;
-    public pos: PongOptionService;
+    ball: Ball;
+    playerOnePaddle: Paddle;
+    playerTwoPaddle: Paddle;
+    pos: PongOptionService;
+    gameRunning: boolean;
     private score: Score;
-    private gameRunning: boolean;
     private toggle: boolean;
 
     private height: number;
@@ -39,14 +40,13 @@ export class PongGame {
         this.height = height;
         this.width = width;
         this.pos = pos;
-        this.pos.initializeOptions();
         this.score = {
             playerOne: 0,
             playerTwo: 0
         };
         this.gameRunning = false;
         this.toggle = false;
-
+        this.pos.initializeOptions();
         this.resetCanvas();
     }
 
@@ -140,7 +140,6 @@ export class PongGame {
 
     private getOffset(paddle: Paddle): number {
         return this.getRndInteger(0, paddle.getHeight() / 2) * ( Math.round(Math.random()) * 2 - 1 );
-
     }
 
     private getOffsets(): void {
@@ -238,14 +237,6 @@ export class PongGame {
             this.score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
             this.score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
         }
-    }
-
-    getGameRunning(): boolean {
-        return this.gameRunning;
-    }
-
-    setGameRunning(): void {
-        this.gameRunning = true;
     }
 
     gameOver(): boolean {

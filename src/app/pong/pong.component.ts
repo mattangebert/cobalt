@@ -59,9 +59,13 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
 
   startGame(): void {
+    if ( this.pongGame.gameRunning ) {
+      return;
+    }
+
     this.start = new Date();
     this.pongGame.pos.setOptions(this.pongOptions);
-    this.pongGame.setGameRunning();
+    this.pongGame.gameRunning = true;
     this.pongGame.resetCanvas();
 
     if (this.interval) {
@@ -174,7 +178,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     if ('ArrowDown' === event.code) {
       this.controlStates.controlTwo.downPressed = false;
     }
-    if ('Space' === event.code && !this.pongGame.getGameRunning()) {
+    if ('Space' === event.code) {
       this.startGame();
     }
   }
