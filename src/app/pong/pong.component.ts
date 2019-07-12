@@ -128,7 +128,7 @@ export class PongComponent implements OnInit, AfterViewInit {
 
     // write score
     this.context.fillStyle = 'rgb(255,255,255)';
-    const score = this.pongGame.getScore();
+    const score = this.pongGame.score;
     this.context.font = '30px Arial';
     this.context.textAlign = 'center';
     this.context.fillText(score.playerOne + ' : ' + score.playerTwo , this.width / 2, 50);

@@ -1026,7 +1026,77 @@ describe('PongGame', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
+  /****************************************************************************************************************************************
+   * get score()
+   ****************************************************************************************************************************************/
+  it('should return score playerOne = 0 playerTwo = 0', () => {
+    const score = pongGame.score;
 
-  // ball out left
-  // ball out right
+    expect(score.playerOne).toBe(0);
+    expect(score.playerTwo).toBe(0);
+  });
+
+  /****************************************************************************************************************************************
+   * gameOver()
+   ****************************************************************************************************************************************/
+  it('should return false when game is running', () => {
+    expect(pongGame.gameOver()).toBeFalsy();
+  });
+
+  it('should return gameOver true when ball runs out left side', () => {
+    pongGame.ball = new Ball(15, 15, 2, {x: 2, y: 100}, {x: -1, y: 0});
+
+    pongGame.tick(controlStates);
+
+    expect(pongGame.gameOver()).toBeTruthy();
+
+  });
+
+  it('should return gameOver true when ball runs out rigth side', () => {
+    pongGame.ball = new Ball(15, 15, 2, {x: 798, y: 100}, {x: 1, y: 0});
+
+    pongGame.tick(controlStates);
+
+    expect(pongGame.gameOver()).toBeTruthy();
+  });
+
+  it('should increase playerOne score by 1 if ball runs out right side', () => {
+    pongGame.ball = new Ball(15, 15, 2, {x: 798, y: 100}, {x: 1, y: 0});
+
+    pongGame.tick(controlStates);
+    pongGame.gameOver();
+
+    const score = pongGame.score;
+
+    expect(score.playerOne).toBe(1);
+    expect(score.playerTwo).toBe(0);
+  });
+
+  it('should increase playerTwo score by 1 if ball runs out left side', () => {
+    pongGame.ball = new Ball(15, 15, 2, {x: 2, y: 100}, {x: -1, y: 0});
+    pongGame.tick(controlStates);
+    pongGame.gameOver();
+
+    const score = pongGame.score;
+
+    expect(score.playerOne).toBe(0);
+    expect(score.playerTwo).toBe(1);
+  });
+
+  it('should return score 2:1', () => {
+    pongGame.ball = new Ball(15, 15, 2, {x: 798, y: 100}, {x: 1, y: 0});
+    pongGame.tick(controlStates);
+    pongGame.gameOver();
+    pongGame.ball = new Ball(15, 15, 2, {x: 2, y: 100}, {x: -1, y: 0});
+    pongGame.tick(controlStates);
+    pongGame.gameOver();
+    pongGame.ball = new Ball(15, 15, 2, {x: 798, y: 100}, {x: 1, y: 0});
+    pongGame.tick(controlStates);
+    pongGame.gameOver();
+
+    const score = pongGame.score;
+
+    expect(score.playerOne).toBe(2);
+    expect(score.playerTwo).toBe(1);
+  });
 });

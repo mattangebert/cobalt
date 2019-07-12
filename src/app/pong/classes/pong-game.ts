@@ -25,7 +25,7 @@ export class PongGame {
     playerTwoPaddle: Paddle;
     pos: PongOptionService;
     gameRunning: boolean;
-    private score: Score;
+    private _score: Score;
     private toggle: boolean;
 
     private height: number;
@@ -40,7 +40,7 @@ export class PongGame {
         this.height = height;
         this.width = width;
         this.pos = pos;
-        this.score = {
+        this._score = {
             playerOne: 0,
             playerTwo: 0
         };
@@ -228,14 +228,14 @@ export class PongGame {
 
     }
 
-    getScore(): Score {
-        return this.score;
+    get score(): Score {
+        return this._score;
     }
 
     private updateScore(): void {
         if (!this.gameRunning) {
-            this.score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
-            this.score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
+            this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
+            this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
         }
     }
 
