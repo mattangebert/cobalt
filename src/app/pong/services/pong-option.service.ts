@@ -25,59 +25,27 @@ export class PongOptionService {
   constructor() {}
 
   initializeOptions(): void {
-    this.setIsPlayerOne(true);
-    this.setIsPlayerTwo(false);
-    this.setPaddleLeftOption({height: 100, width: 20, speed: 2.0});
-    this.setPaddleRightOption({height: 100, width: 20, speed: 2.0});
+    this.isPlayerOne = true;
+    this.isPlayerTwo = false;
+    this.paddleLeftOption = {height: 100, width: 20, speed: 2.0};
+    this.paddleRightOption = {height: 100, width: 20, speed: 2.0};
   }
 
   getOptions(): PongOption {
     const pongOption = {
-      isPlayerOne: this.getIsPlayerOne(),
-      isPlayerTwo: this.getIsPlayerTwo(),
-      paddleLeft: this.getPaddleLeftOption(),
-      paddleRight: this.getPaddleRightOption()
+      isPlayerOne: this.isPlayerOne,
+      isPlayerTwo: this.isPlayerTwo,
+      paddleLeft: this.paddleLeftOption,
+      paddleRight: this.paddleRightOption
     };
 
     return pongOption;
   }
 
   setOptions(options: PongOption): void {
-    this.setIsPlayerOne(options.isPlayerOne);
-    this.setIsPlayerTwo(options.isPlayerTwo);
-    this.setPaddleLeftOption(options.paddleLeft);
-    this.setPaddleRightOption(options.paddleRight);
-  }
-
-  setIsPlayerOne(isPlayer: boolean): void {
-    this.isPlayerOne = isPlayer;
-  }
-
-  getIsPlayerOne(): boolean {
-    return this.isPlayerOne;
-  }
-
-  setIsPlayerTwo(isPlayer: boolean): void {
-    this.isPlayerTwo = isPlayer;
-  }
-
-  getIsPlayerTwo(): boolean {
-    return this.isPlayerTwo;
-  }
-
-  setPaddleLeftOption(paddleOption: PaddleOption): void {
-    this.paddleLeftOption = paddleOption;
-  }
-
-  getPaddleLeftOption(): PaddleOption {
-    return this.paddleLeftOption;
-  }
-
-  setPaddleRightOption(paddleOption: PaddleOption): void {
-    this.paddleRightOption = paddleOption;
-  }
-
-  getPaddleRightOption(): PaddleOption {
-    return this.paddleRightOption;
+    this.isPlayerOne = options.isPlayerOne;
+    this.isPlayerTwo = options.isPlayerTwo;
+    this.paddleLeftOption = options.paddleLeft;
+    this.paddleRightOption = options.paddleRight;
   }
 }

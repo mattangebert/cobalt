@@ -2,7 +2,6 @@ import { Ball } from './ball';
 import { Paddle } from './paddle';
 import { Boundaries } from '../../classes/moveable-object';
 import { PongOptionService } from '../services/pong-option.service';
-import { OnInit } from '@angular/core';
 
 export interface PongControlStates {
     controlOne: PongControlState;
@@ -51,8 +50,8 @@ export class PongGame {
     }
 
     resetCanvas(): void {
-        const paddleLeftOption = this.pos.getPaddleLeftOption();
-        const paddleRightOption = this.pos.getPaddleRightOption();
+        const paddleLeftOption = this.pos.paddleLeftOption;
+        const paddleRightOption = this.pos.paddleRightOption;
 
         this.playerOnePaddle =  new Paddle(
             paddleLeftOption.height,
@@ -95,31 +94,31 @@ export class PongGame {
         this.getOffsets();
 
         // single Player
-        if (this.pos.getIsPlayerOne() !== this.pos.getIsPlayerTwo()) {
+        if (this.pos.isPlayerOne !== this.pos.isPlayerTwo) {
             const mergedControll: PongControlState = {upPressed: false, downPressed: false};
 
             mergedControll.upPressed = controlStates.controlOne.upPressed || controlStates.controlTwo.upPressed;
             mergedControll.downPressed = controlStates.controlOne.downPressed || controlStates.controlTwo.downPressed;
 
-            if (this.pos.getIsPlayerOne()) {
+            if (this.pos.isPlayerOne) {
                 this.handleControl(mergedControll, this.playerOnePaddle);
             }
-            if (this.pos.getIsPlayerTwo()) {
+            if (this.pos.isPlayerTwo) {
                 this.handleControl(mergedControll, this.playerTwoPaddle);
             }
         }
 
         // multiplayer
-        if (this.pos.getIsPlayerOne() && this.pos.getIsPlayerTwo()) {
+        if (this.pos.isPlayerOne && this.pos.isPlayerTwo) {
             this.handleControl(controlStates.controlOne, this.playerOnePaddle);
             this.handleControl(controlStates.controlTwo, this.playerTwoPaddle);
         }
 
         // computer
-        if (!this.pos.getIsPlayerOne()) {
+        if (!this.pos.isPlayerOne) {
             this.movePaddle(this.playerOnePaddle, this.offsets.playerOne);
         }
-        if (!this.pos.getIsPlayerTwo()) {
+        if (!this.pos.isPlayerTwo) {
             this.movePaddle(this.playerTwoPaddle, this.offsets.playerTwo);
         }
     }
