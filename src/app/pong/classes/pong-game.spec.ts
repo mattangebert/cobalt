@@ -853,6 +853,35 @@ describe('PongGame', () => {
     expect(spyP2Three).toHaveBeenCalledTimes(0);
   });
 
+  it('should move paddleOne to ball with + a offset', () => {
+    pos.isPlayerOne = false;
+    pos.isPlayerTwo = false;
+
+    for (let i = 0; i < 200; i++) { // 200 ticks should be enough to reach the ball
+      pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 100}, {x: 1, y: -1});
+      pongGame.tick(controlStates);
+    }
+
+    const dist = Math.abs(pongGame.playerOnePaddle.getPosition().y - pongGame.ball.getPosition().y);
+    expect(dist).toBeLessThan(pongGame.playerOnePaddle.getHeight());
+  });
+
+  it('should move paddleTwo to ball with + a offset', () => {
+    pos.isPlayerOne = false;
+    pos.isPlayerTwo = false;
+
+    pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 100}, {x: 1, y: -1}); // move one time to set offsets.isPositive to false
+    pongGame.tick(controlStates);
+
+    for (let i = 0; i < 200; i++) { // 200 ticks should be enough to reach the ball
+      pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 100}, {x: 1, y: 1});
+      pongGame.tick(controlStates);
+    }
+
+    const dist = Math.abs(pongGame.playerTwoPaddle.getPosition().y - pongGame.ball.getPosition().y);
+    expect(dist).toBeLessThan(pongGame.playerTwoPaddle.getHeight());
+  });
+
   /* Collisions --------------------------------------------------------------------------------------------------------------------------*/
   it('should bounce ball of top when moving upwards', () => {
     pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 0}, {x: 1, y: -1}); // y: 0 => top border

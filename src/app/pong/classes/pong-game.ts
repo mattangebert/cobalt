@@ -78,6 +78,7 @@ export class PongGame {
         if (this.toggle) {
             this.ball =  new Ball(15, 15, speed,
                 { x: this.width / 2, y: this.height / 2}, { x: -1, y: 0 });
+            this.offsets.isPositive = false;
         }
         this.toggle = !this.toggle;
     }
