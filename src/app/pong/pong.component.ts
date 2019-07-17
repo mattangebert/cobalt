@@ -19,17 +19,18 @@ export class PongComponent implements OnInit, AfterViewInit {
   public width = 800;
   public height = 600;
 
+  pongGame: PongGame;
+
   private context: CanvasRenderingContext2D;
-  private pongGame: PongGame;
   private ticksPerSecond = 60;
-  private controlStates: PongControlStates;
+  private _controlStates: PongControlStates;
   private interval: NodeJS.Timer;
   private start: any;
   private pongOptions: PongOption;
 
   constructor(optionService: OptionService, pos: PongOptionService) {
     this.pongGame = new PongGame(this.height, this.width, pos);
-    this.controlStates = {
+    this._controlStates = {
       controlOne: {upPressed: false, downPressed: false},
       controlTwo: {upPressed: false, downPressed: false},
     };
@@ -53,6 +54,10 @@ export class PongComponent implements OnInit, AfterViewInit {
     );
   }
 
+  get controlStates(): PongControlStates {
+    return this._controlStates;
+  }
+
   initialiseGame(): void {
     this.context = this.canvasElement.nativeElement.getContext('2d');
     this.renderFrame();
@@ -73,7 +78,7 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.initialiseGame();
     }
     this.interval = setInterval(() => {
-      this.pongGame.tick(this.controlStates);
+      this.pongGame.tick(this._controlStates);
     }, 1 / this.ticksPerSecond);
   }
 
@@ -151,32 +156,32 @@ export class PongComponent implements OnInit, AfterViewInit {
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent): void {
     if ('KeyW' === event.code) {
-      this.controlStates.controlOne.upPressed = true;
+      this._controlStates.controlOne.upPressed = true;
     }
     if ('KeyS' === event.code) {
-      this.controlStates.controlOne.downPressed = true;
+      this._controlStates.controlOne.downPressed = true;
     }
     if ('ArrowUp' === event.code) {
-      this.controlStates.controlTwo.upPressed = true;
+      this._controlStates.controlTwo.upPressed = true;
     }
     if ('ArrowDown' === event.code) {
-      this.controlStates.controlTwo.downPressed = true;
+      this._controlStates.controlTwo.downPressed = true;
     }
   }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent2(event: KeyboardEvent): void {
     if ('KeyW' === event.code) {
-      this.controlStates.controlOne.upPressed = false;
+      this._controlStates.controlOne.upPressed = false;
     }
     if ('KeyS' === event.code) {
-      this.controlStates.controlOne.downPressed = false;
+      this._controlStates.controlOne.downPressed = false;
     }
     if ('ArrowUp' === event.code) {
-      this.controlStates.controlTwo.upPressed = false;
+      this._controlStates.controlTwo.upPressed = false;
     }
     if ('ArrowDown' === event.code) {
-      this.controlStates.controlTwo.downPressed = false;
+      this._controlStates.controlTwo.downPressed = false;
     }
     if ('Space' === event.code) {
       this.startGame();

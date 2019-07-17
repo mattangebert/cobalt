@@ -3,8 +3,8 @@ import { OptionBase } from './option-base';
 export class OptionInput extends OptionBase<string> {
     controlType = 'input';
     type: string;
-    min: number | string;
-    max: number | string;
+    min: number;
+    max: number;
     step: number;
 
     constructor(options: {} = {}) {

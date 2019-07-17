@@ -43,14 +43,8 @@ describe('FormOptionComponent', () => {
   });
 
   it('should set payload on submit', () => {
-    component.form = new FormGroup({
-      first: new FormControl(),
-      last: new FormControl()
-    });
-
-    component.form.setValue({first: 'Nancy', last: 'Drew'});
-
-    component.onSubmit();
+    const element: HTMLButtonElement = fixture.nativeElement.querySelector('button[type="submit"]');
+    element.click();
 
     expect(component.payLoad).not.toEqual('');
   });

@@ -21,7 +21,7 @@ describe('OptionInput', () => {
       type: 'number',
     });
 
-    expect(inp.min).toBe('');
-    expect(inp.max).toBe('');
+    expect('' + inp.min).toBe('');
+    expect('' + inp.max).toBe('');
   });
 });
