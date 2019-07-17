@@ -233,10 +233,9 @@ export class PongGame {
     }
 
     private updateScore(): void {
-        if (!this.gameRunning) {
-            this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
-            this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
-        }
+        this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
+        this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
+
     }
 
     gameOver(): boolean {

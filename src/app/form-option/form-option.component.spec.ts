@@ -2,7 +2,7 @@ import { FormOptionComponent } from './form-option.component';
 import { ComponentFixture, async, TestBed } from '@angular/core/testing';
 import { OptionInput } from './model/option-input';
 import { FormOptionElementComponent } from './form-option-element/form-option-element.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormGroup, FormControl } from '@angular/forms';
 
 describe('FormOptionComponent', () => {
   let component: FormOptionComponent;
@@ -36,5 +36,22 @@ describe('FormOptionComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should initalize payload as empty string', () => {
+    expect(component.payLoad).toBe('');
+  });
+
+  it('should set payload on submit', () => {
+    component.form = new FormGroup({
+      first: new FormControl(),
+      last: new FormControl()
+    });
+
+    component.form.setValue({first: 'Nancy', last: 'Drew'});
+
+    component.onSubmit();
+
+    expect(component.payLoad).not.toEqual('');
   });
 });
