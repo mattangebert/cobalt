@@ -49,7 +49,7 @@ describe('PongOptionService', () => {
         width: 40,
         speed: 1.0
       }
-    }
+    };
 
     service.setOptions(option);
 

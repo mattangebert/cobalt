@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { PongOptionService } from '../services/pong-option.service';
 import { PongGame, PongControlStates } from './pong-game';
 import { Ball } from './ball';

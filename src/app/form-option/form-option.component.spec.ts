@@ -2,7 +2,7 @@ import { FormOptionComponent } from './form-option.component';
 import { ComponentFixture, async, TestBed } from '@angular/core/testing';
 import { OptionInput } from './model/option-input';
 import { FormOptionElementComponent } from './form-option-element/form-option-element.component';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 describe('FormOptionComponent', () => {
   let component: FormOptionComponent;
