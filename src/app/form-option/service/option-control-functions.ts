@@ -1,6 +1,11 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OptionBase } from '../model/option-base';
 
+/**
+ * creates a FormGroup out of given options array
+ * @param options array of form-options
+ * @return options as FormGroup
+ */
 export function toFormGroup( options: OptionBase<any>[] ): FormGroup {
   const group: any = {};
 

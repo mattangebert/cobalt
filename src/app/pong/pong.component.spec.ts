@@ -9,11 +9,29 @@ describe('PongComponent', () => {
   let component: PongComponent;
   let fixture: ComponentFixture<PongComponent>;
   let formOptions: {
+    /**
+     * Controller of left paddle
+     */
     player1: string,
+    /**
+     * Controller of right paddle
+     */
     player2: string,
+    /**
+     * Height of left paddle
+     */
     paddleLeftHeight: number,
+    /**
+     * Speed of left paddle
+     */
     paddleLeftSpeed: number,
+    /**
+     * Height of right paddle
+     */
     paddleRightHeight: number,
+    /**
+     * Speed of right paddle
+     */
     paddleRightSpeed: number
   };
 

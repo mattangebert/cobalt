@@ -4,31 +4,83 @@ import { Boundaries } from '../../classes/moveable-object';
 import { PongOptionService } from '../services/pong-option.service';
 
 export interface PongControlStates {
+    /**
+     * control for paddleOne
+     */
     controlOne: PongControlState;
+    /**
+     * control for paddleTwo
+     */
     controlTwo: PongControlState;
 }
 
 interface PongControlState {
+    /**
+     * if key to move up is pressed
+     */
     upPressed: boolean;
+    /**
+     * if key to move down is pressed
+     */
     downPressed: boolean;
 }
 
 interface Score {
+    /**
+     * score of playerOne
+     */
     playerOne: number;
+    /**
+     * score of playerTwo
+     */
     playerTwo: number;
 }
 
+/**
+ * Class to create a pong game instance
+ * ====================================
+ */
 export class PongGame {
+    /**
+     * Ball object in pong game
+     */
     public ball: Ball;
+    /**
+     * Paddle of playerOne leftSide
+     */
     public playerOnePaddle: Paddle;
+    /**
+     * Paddle of playerTwo rightSide
+     */
     public playerTwoPaddle: Paddle;
+    /**
+     * Service to get game options
+     */
     public pos: PongOptionService;
+    /**
+     * If game is currently running
+     */
     public gameRunning: boolean;
+    /**
+     * The score of both players
+     */
     private _score: Score;
+    /**
+     * Toggle direction ball moves at start
+     */
     private toggle: boolean;
-
+    /**
+     * Height of canvas element
+     */
     private height: number;
+    /**
+     * Width of canvas element
+     */
     private width: number;
+    /**
+     * Offsets to let ai paddles catch ball with a ancle
+     * Boolean to teterminate if new offset should be set
+     */
     private offsets = { playerOne: 0, playerTwo: 0, isPositive: true };
 
     constructor(
@@ -49,6 +101,9 @@ export class PongGame {
         this.resetCanvas();
     }
 
+    /**
+     * Initialize|reset Canvas with a ball and two paddles
+     */
     public resetCanvas(): void {
         const paddleLeftOption = this.pos.paddleLeftOption;
         const paddleRightOption = this.pos.paddleRightOption;
@@ -83,6 +138,11 @@ export class PongGame {
         this.toggle = !this.toggle;
     }
 
+    /**
+     * One tick of a running game
+     * let ball and paddles move & draw new positons
+     * @param controlStates The controlStates for player movement
+     */
     public tick(controlStates: PongControlStates): void {
         this.ball.move();
 
@@ -91,6 +151,10 @@ export class PongGame {
         this.checkCollisions();
     }
 
+    /**
+     * Handle movement of players and ai paddles
+     * @param controlStates The controlStates for player movement
+     */
     private handleMovement(controlStates: PongControlStates): void {
         this.getOffsets();
 
@@ -124,6 +188,11 @@ export class PongGame {
         }
     }
 
+    /**
+     * Handle player paddle movememnt
+     * @param controlState The controlState of the player
+     * @param paddle The paddle of the player
+     */
     private handleControl(controlState: PongControlState, paddle: Paddle, ): void {
         const paddleBounds: Boundaries = paddle.getCollisionBoundaries();
 
@@ -138,10 +207,18 @@ export class PongGame {
         }
     }
 
+    /**
+     * Get a random offset in the paddles height aiming to hit the ball at
+     * @param paddle The paddle the offset is for
+     * @return The random offset
+     */
     private getOffset(paddle: Paddle): number {
         return this.getRndInteger(0, paddle.getHeight() / 2) * ( Math.round(Math.random()) * 2 - 1 );
     }
 
+    /**
+     * Get new offsets for paddles if ball moves towards them
+     */
     private getOffsets(): void {
         if (this.offsets.isPositive && this.ball.getSpeedRatio().y < 0) {
             this.offsets.playerOne = this.getOffset(this.playerOnePaddle);
@@ -154,6 +231,11 @@ export class PongGame {
         }
     }
 
+    /**
+     * Move ai paddle with given offset towards ball
+     * @param paddle The target paddle
+     * @param offset The used offset for the paddle
+     */
     private movePaddle(paddle: Paddle, offset: number): void {
         const paddleBounds =  paddle.getCollisionBoundaries();
 
@@ -164,10 +246,21 @@ export class PongGame {
         }
     }
 
+    /**
+     * Get a random integer bertween min and max
+     * @param min The minimal random value
+     * @param max The maximal random value
+     * @return The random value
+     */
     private getRndInteger(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1) ) + min;
       }
 
+    /**
+     * Check & handle collisions
+     * Ball with border or paddle
+     * Paddles with borders
+     */
     private checkCollisions(): void {
         const ballBounds = this.ball.getCollisionBoundaries();
         const paddleBoundsOne =  this.playerOnePaddle.getCollisionBoundaries();
@@ -201,7 +294,13 @@ export class PongGame {
 
     }
 
-    private checkPaddleBallCollision(paddle: Paddle, reverse: boolean): void {
+    /**
+     * Check collision between ball and paddle
+     * Reverse ball x direction if collision
+     * @param paddle The paddle to check collsions with
+     * @param ballMovesRightwards If ball is moving towards right
+     */
+    private checkPaddleBallCollision(paddle: Paddle, ballMovesRightwards: boolean): void {
         const paddleBounds =  paddle.getCollisionBoundaries();
         const ballBounds = this.ball.getCollisionBoundaries();
 
@@ -214,7 +313,7 @@ export class PongGame {
 
         if ( condition ) {
             // let ball only fly toward enemy
-            const reverseCondtion = reverse ? this.ball.getSpeedRatio().x > 0 : this.ball.getSpeedRatio().x < 0;
+            const reverseCondtion = ballMovesRightwards ? this.ball.getSpeedRatio().x > 0 : this.ball.getSpeedRatio().x < 0;
             if (reverseCondtion) { this.ball.reverseX(); }
 
           /* Set vertical speed ratio by taking ratio of
@@ -228,16 +327,27 @@ export class PongGame {
 
     }
 
+    /**
+     * Get current score
+     */
     get score(): Score {
         return this._score;
     }
 
+    /**
+     * Update score points of players
+     */
     private updateScore(): void {
         this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
         this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
 
     }
 
+    /**
+     * Check if game is over
+     * Set gameRunnin to false on game over
+     * @return if game is over
+     */
     public gameOver(): boolean {
         const collisionBoundaries = this.ball.getCollisionBoundaries();
         const condition = collisionBoundaries.left <= 0 || collisionBoundaries.right >= this.width;

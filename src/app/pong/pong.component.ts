@@ -1,31 +1,68 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { PongGame, PongControlStates } from './classes/pong-game';
 import { Boundaries } from '../classes/moveable-object';
 import { OptionService } from '../form-option/service/option.service';
 import { FormOptionComponent } from '../form-option/form-option.component';
 import { PongOptionService, PongOption } from './services/pong-option.service';
+import { OptionBase } from '../form-option/model/option-base';
 
+/**
+ * Component to create a pong game
+ */
 @Component({
   selector: 'app-pong',
   templateUrl: './pong.component.html',
   styleUrls: ['./pong.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PongComponent implements OnInit, AfterViewInit {
+  /**
+   * Canvas element reference for pong game
+   */
   @ViewChild('pongCanvas', { static: true }) public canvasElement: ElementRef;
+  /**
+   * Component to render & handle form for pong game options
+   */
   @ViewChild('optionForm', { static: true}) public formOptionComp: FormOptionComponent;
-
-  public options: any[];
-
+  /**
+   * Array holding form options elements
+   */
+  public options: OptionBase<any>[];
+  /**
+   * width of canvas
+   */
   public width = 800;
+  /**
+   * height of canvas
+   */
   public height = 600;
-
+  /**
+   * Instance of current pong game
+   */
   public pongGame: PongGame;
-
+  /**
+   * Pong game canvas context to draw on
+   */
   private context: CanvasRenderingContext2D;
+  /**
+   * Intervall amount 1/ticksPerSecond
+   */
   private ticksPerSecond = 60;
+  /**
+   * ControlStates for user movment
+   */
   private _controlStates: PongControlStates;
+  /**
+   * Intervall rendering ticks
+   */
   private interval: NodeJS.Timer;
-  private start: any;
+  /**
+   * Time game stared
+   */
+  private start: Date;
+  /**
+   * Options for pong game
+   */
   private pongOptions: PongOption;
 
   constructor(optionService: OptionService, pos: PongOptionService) {
@@ -38,10 +75,16 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pongOptions = pos.getOptions();
   }
 
+  /**
+   * Call initaliseGame
+   */
   public ngOnInit(): void {
     this.initialiseGame();
   }
 
+  /**
+   * Listen to form option changes
+   */
   public ngAfterViewInit(): void {
     this.formOptionComp.form.valueChanges.forEach(
       (value: string) => {
@@ -54,15 +97,26 @@ export class PongComponent implements OnInit, AfterViewInit {
     );
   }
 
+  /**
+   * Get controlStates for user movement
+   * @return current controlStates
+   */
   get controlStates(): PongControlStates {
     return this._controlStates;
   }
 
+  /**
+   * Initialize context & canvas
+   */
   public initialiseGame(): void {
     this.context = this.canvasElement.nativeElement.getContext('2d');
     this.renderFrame();
   }
 
+  /**
+   * Start a new game
+   * Returns if game still running
+   */
   public startGame(): void {
     if ( this.pongGame.gameRunning ) {
       return;
@@ -82,6 +136,9 @@ export class PongComponent implements OnInit, AfterViewInit {
     }, 1 / this.ticksPerSecond);
   }
 
+  /**
+   * Handles Rendering for objects and information on Canvas
+   */
   public renderFrame(): void {
     if (this.pongGame.gameOver()) {
       this.renderScore(); // render end score
@@ -126,6 +183,9 @@ export class PongComponent implements OnInit, AfterViewInit {
     window.requestAnimationFrame(() => this.renderFrame());
   }
 
+  /**
+   * Renders current score on canvas
+   */
   private renderScore(): void {
     // erase old scoe
     this.context.fillStyle = 'rgb(0,0,0)';
@@ -139,6 +199,9 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.context.fillText(score.playerOne + ' : ' + score.playerTwo , this.width / 2, 50);
   }
 
+  /**
+   * Renders game over infomration on canvas
+   */
   private renderGameOver(): void {
       this.context.fillStyle = 'rgb(255,255,255)';
       this.context.font = '30px Arial';
@@ -153,6 +216,10 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.context.fillText(((end.getTime() - this.start.getTime()) / 1000) + 's', this.width / 2, this.height / 2 + 30);
   }
 
+  /**
+   * Listens to user keydown events and updates controlStates
+   * @param event Keys user presses down
+   */
   @HostListener('window:keydown', ['$event'])
   public keyEvent(event: KeyboardEvent): void {
     if ('KeyW' === event.code) {
@@ -169,6 +236,10 @@ export class PongComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Listens to user keyup events and updates controlStates
+   * @param event Keys user releases
+   */
   @HostListener('window:keyup', ['$event'])
   public keyEvent2(event: KeyboardEvent): void {
     if ('KeyW' === event.code) {

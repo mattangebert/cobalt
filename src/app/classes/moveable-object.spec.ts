@@ -1,5 +1,8 @@
 import { MoveableObject } from './moveable-object';
 
+/**
+ * Test Class to test abstract MoveableObject class
+ */
 class MyClass extends MoveableObject {
   // class extending abstact class
 }

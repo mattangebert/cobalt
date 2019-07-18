@@ -3,11 +3,18 @@ import { OptionBase } from '../model/option-base';
 import { OptionInput } from '../model/option-input';
 import { OptionSelect } from '../model/option-select';
 
+/**
+ * Service providing options for form-option component
+ * ================================================
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class OptionService {
 
+  /**
+   * array of options to create form elements for dynamic form
+   */
   public options: OptionBase<any>[] = [];
   // TODO outsource to DB
   // TODO make ansynchronous
@@ -16,6 +23,9 @@ export class OptionService {
     this.setPongoptions();
   }
 
+  /**
+   * creates options for PongGame
+   */
   private setPongoptions(): void {
     const options: OptionBase<any>[] = [
 

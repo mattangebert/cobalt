@@ -1,4 +1,4 @@
-import { Component, Input,  } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy,  } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { OptionBase } from '../model/option-base';
 
@@ -9,7 +9,8 @@ import { OptionBase } from '../model/option-base';
 @Component({
   selector: 'app-form-option-element',
   templateUrl: './form-option-element.component.html',
-  styleUrls: ['./form-option-element.component.scss']
+  styleUrls: ['./form-option-element.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormOptionElementComponent {
   /**
