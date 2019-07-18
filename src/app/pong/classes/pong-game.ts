@@ -68,7 +68,7 @@ export class PongGame {
     /**
      * Toggle direction ball moves at start
      */
-    private toggle: boolean;
+    private toggleBallDirectionStart: boolean;
     /**
      * Height of canvas element
      */
@@ -96,7 +96,7 @@ export class PongGame {
             playerTwo: 0
         };
         this.gameRunning = false;
-        this.toggle = false;
+        this.toggleBallDirectionStart = false;
         this.pos.initializeOptions();
         this.resetCanvas();
     }
@@ -121,21 +121,7 @@ export class PongGame {
             {x: this.width - 50, y: this.height / 2 }
         );
 
-        // todo speed or behavour adjustment for ai difficult
-
-        let speed = 2;
-        if (true) { // todo option adjusted speed
-            speed = Math.min(paddleLeftOption.speed, paddleRightOption.speed) * ((this.width - 100) / this.height);
-            // speed = (speed / 20) * 21;
-        }
-
-        this.ball =  new Ball(15, 15, speed, { x: this.width / 2, y: this.height / 2 }, { x: 1, y: 0 });
-        if (this.toggle) {
-            this.ball =  new Ball(15, 15, speed,
-                { x: this.width / 2, y: this.height / 2}, { x: -1, y: 0 });
-            this.offsets.isPositive = false;
-        }
-        this.toggle = !this.toggle;
+        this.initializeBall();
     }
 
     /**
@@ -149,6 +135,60 @@ export class PongGame {
         this.handleMovement(controlStates);
 
         this.checkCollisions();
+    }
+
+    /**
+     * Check if game is over
+     * Set gameRunnin to false on game over
+     * @return if game is over
+     */
+    public gameOver(): boolean {
+        const collisionBoundaries = this.ball.getCollisionBoundaries();
+        const condition = collisionBoundaries.left <= 0 || collisionBoundaries.right >= this.width;
+
+        if (condition) {
+            this.gameRunning = false;
+            this.updateScore();
+        }
+
+        return condition;
+    }
+
+    /**
+     * Get current score
+     */
+    get score(): Score {
+        return this._score;
+    }
+
+    /**
+     * Update score points of players
+     */
+    private updateScore(): void {
+        this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
+        this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
+
+    }
+
+    /**
+     * initialize Ball
+     */
+    private initializeBall(): void {
+        // todo speed or behavour adjustment for ai difficult
+
+        let speed = 2;
+        if (true) { // todo option adjusted speed
+            speed = Math.min(this.pos.paddleLeftOption.speed, this.pos.paddleRightOption.speed) * ((this.width - 100) / this.height);
+            // speed = (speed / 20) * 21;
+        }
+
+        this.ball =  new Ball(15, 15, speed, { x: this.width / 2, y: this.height / 2 }, { x: 1, y: 0 });
+        if (this.toggleBallDirectionStart) {
+            this.ball =  new Ball(15, 15, speed,
+                { x: this.width / 2, y: this.height / 2}, { x: -1, y: 0 });
+            this.offsets.isPositive = false;
+        }
+        this.toggleBallDirectionStart = !this.toggleBallDirectionStart;
     }
 
     /**
@@ -325,38 +365,5 @@ export class PongGame {
           this.ball.setVerticalSpeedRatio(vsr);
         }
 
-    }
-
-    /**
-     * Get current score
-     */
-    get score(): Score {
-        return this._score;
-    }
-
-    /**
-     * Update score points of players
-     */
-    private updateScore(): void {
-        this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
-        this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
-
-    }
-
-    /**
-     * Check if game is over
-     * Set gameRunnin to false on game over
-     * @return if game is over
-     */
-    public gameOver(): boolean {
-        const collisionBoundaries = this.ball.getCollisionBoundaries();
-        const condition = collisionBoundaries.left <= 0 || collisionBoundaries.right >= this.width;
-
-        if (condition) {
-            this.gameRunning = false;
-            this.updateScore();
-        }
-
-        return condition;
     }
 }
