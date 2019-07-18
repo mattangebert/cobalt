@@ -1,16 +1,16 @@
 <div>
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
-        <div *ngFor="let option of options" class="form-row">
+        <div *ngFor="let option of options trackBy: trackByFn" class="form-row">
             <app-form-option-element [option]="option" [form]="form"></app-form-option-element>
         </div>
 
         <div class="form-row">
-            <button type="submit" [disabled]="!form.valid">Save</button>
+            <button type="submit" [disabled]="!form.valid" i18n="@@saveMessage">Save</button>
         </div>
     </form>
 
     <div *ngIf="payLoad" class="form-row">
-        <strong>Saved the folliwing values</strong><br>{{ payLoad }}
+        <strong i18n="@@savedValuesMessage">Saved the folliwing values</strong><br>{{ payLoad }}
     </div>
 </div>

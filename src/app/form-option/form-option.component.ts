@@ -86,4 +86,11 @@ export class FormOptionComponent implements OnInit {
   public onSubmit(): void {
     this.payLoad = JSON.stringify(this.form.value);
   }
+
+  /**
+   * tracks option for angular ngFor
+   */
+  public trackByFn(index: number, item: OptionBase<any>): string {
+    return item.key;
+  }
 }
