@@ -14,23 +14,23 @@ export class Ball extends MoveableObject {
         this.speedRatio = speedRatio;
     }
 
-    reverseX(): void {
+    public reverseX(): void {
         this.speedRatio.x = - this.speedRatio.x;
     }
 
-    reverseY(): void {
+    public reverseY(): void {
         this.speedRatio.y = - this.speedRatio.y;
     }
 
-    setVerticalSpeedRatio(verticalSpeedRatio: number): void {
+    public setVerticalSpeedRatio(verticalSpeedRatio: number): void {
         this.speedRatio.y = verticalSpeedRatio;
     }
 
-    move(): void {
+    public move(): void {
         super.move(this.speedRatio);
     }
 
-    getSpeedRatio(): Point2D {
+    public getSpeedRatio(): Point2D {
         return this.speedRatio;
     }
 }

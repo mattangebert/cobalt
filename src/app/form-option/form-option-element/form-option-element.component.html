@@ -22,7 +22,7 @@
 
                     <fieldset *ngSwitchCase="'radio'">
                         <legend>{{ option.label }}</legend>
-                        <p *ngFor="let opt of option.options; first as isFirst">
+                        <p *ngFor="let opt of option.options; trackBy: trackByFn">
                             <input [name]="option.key" [id]="option.key + opt.key" [value]="opt.key"
                                     [formControlName]="option.key" type="radio" [checked]="opt.value === option.value"/>
                             <label [attr.for]="option.key + opt.key">{{ opt.value }}</label>

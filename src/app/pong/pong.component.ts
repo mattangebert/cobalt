@@ -11,15 +11,15 @@ import { PongOptionService, PongOption } from './services/pong-option.service';
   styleUrls: ['./pong.component.scss'],
 })
 export class PongComponent implements OnInit, AfterViewInit {
-  @ViewChild('pongCanvas', { static: true }) canvasElement: ElementRef;
-  @ViewChild('optionForm', { static: true}) formOptionComp: FormOptionComponent;
+  @ViewChild('pongCanvas', { static: true }) public canvasElement: ElementRef;
+  @ViewChild('optionForm', { static: true}) public formOptionComp: FormOptionComponent;
 
-  options: any[];
+  public options: any[];
 
   public width = 800;
   public height = 600;
 
-  pongGame: PongGame;
+  public pongGame: PongGame;
 
   private context: CanvasRenderingContext2D;
   private ticksPerSecond = 60;
@@ -38,11 +38,11 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pongOptions = pos.getOptions();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.initialiseGame();
   }
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.formOptionComp.form.valueChanges.forEach(
       (value: string) => {
         this.pongOptions.isPlayerOne = value['player1'] === 'player';
@@ -58,12 +58,12 @@ export class PongComponent implements OnInit, AfterViewInit {
     return this._controlStates;
   }
 
-  initialiseGame(): void {
+  public initialiseGame(): void {
     this.context = this.canvasElement.nativeElement.getContext('2d');
     this.renderFrame();
   }
 
-  startGame(): void {
+  public startGame(): void {
     if ( this.pongGame.gameRunning ) {
       return;
     }
@@ -82,7 +82,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     }, 1 / this.ticksPerSecond);
   }
 
-  renderFrame(): void {
+  public renderFrame(): void {
     if (this.pongGame.gameOver()) {
       this.renderScore(); // render end score
       this.renderGameOver(); // render GameOver info
@@ -154,7 +154,7 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent): void {
+  public keyEvent(event: KeyboardEvent): void {
     if ('KeyW' === event.code) {
       this._controlStates.controlOne.upPressed = true;
     }
@@ -170,7 +170,7 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:keyup', ['$event'])
-  keyEvent2(event: KeyboardEvent): void {
+  public keyEvent2(event: KeyboardEvent): void {
     if ('KeyW' === event.code) {
       this._controlStates.controlOne.upPressed = false;
     }

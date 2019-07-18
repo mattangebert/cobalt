@@ -1,10 +1,40 @@
 import { OptionBase } from './option-base';
 
+/**
+ * class to define a Select
+ * ========================
+ *
+ * can be Html Select, Select multi or radio buttons
+ *
+ * extending {@link OptionBase}
+ */
 export class OptionSelect extends OptionBase<string> {
-    controlType = 'select';
-    options: { key: string, value: string }[] = [];
-    type: string;
-    value;
+    /**
+     * controlType for selects
+     */
+    public controlType = 'select';
+    /**
+     * option to be rendered in select
+     */
+    public options: {
+        /**
+         * uniqe id for select option
+         */
+        key: string,
+        /**
+         * value for select option
+         */
+        value: string }[] = [];
+
+    /**
+     * Select type to define used html type.
+     * Can be select, multi or radio
+     */
+    public type: string;
+    /**
+     * start value of select has to be one of options values
+     */
+    public value;
 
     constructor(options: {} = {}) {
         super(options);

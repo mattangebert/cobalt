@@ -17,7 +17,7 @@ export class Paddle extends MoveableObject {
         return this._speedRatio;
     }
 
-    accelerateDown(ratioChange: number): void {
+    public accelerateDown(ratioChange: number): void {
         if (ratioChange < 0 || ratioChange > 1) {
             return;
         }
@@ -26,7 +26,7 @@ export class Paddle extends MoveableObject {
         this.move();
     }
 
-    accelerateUp(ratioChange: number): void {
+    public accelerateUp(ratioChange: number): void {
         if (ratioChange < 0 || ratioChange > 1) {
             return;
         }
@@ -35,7 +35,7 @@ export class Paddle extends MoveableObject {
         this.move();
     }
 
-    declerate(ratioChange: number): void {
+    public declerate(ratioChange: number): void {
         if (this._speedRatio.y < 0) {
             this._speedRatio.y = Math.min(this._speedRatio.y + ratioChange, 0);
         }
@@ -47,7 +47,7 @@ export class Paddle extends MoveableObject {
         this.move();
     }
 
-    move(): void {
+    public move(): void {
         super.move(this._speedRatio);
     }
 }

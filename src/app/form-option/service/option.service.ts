@@ -8,7 +8,7 @@ import { OptionSelect } from '../model/option-select';
 })
 export class OptionService {
 
-  options: OptionBase<any>[] = [];
+  public options: OptionBase<any>[] = [];
   // TODO outsource to DB
   // TODO make ansynchronous
 

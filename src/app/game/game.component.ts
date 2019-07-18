@@ -6,7 +6,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  @ViewChild('gameCanvas', { static: true }) canvasElement: ElementRef;
+  @ViewChild('gameCanvas', { static: true }) public canvasElement: ElementRef;
 
   public width = 800;
   public height = 600;
@@ -15,7 +15,7 @@ export class GameComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.context = this.canvasElement.nativeElement.getContext('2d');
 
     this.context.fillStyle = 'red';

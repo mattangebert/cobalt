@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GameModule } from './game/game.module';
 
+/**
+ * Root module for angular app
+ */
 @NgModule({
   declarations: [
     AppComponent

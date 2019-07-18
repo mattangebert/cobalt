@@ -10,17 +10,17 @@ import { FormGroup } from '@angular/forms';
 })
 export class FormOptionComponent implements OnInit {
 
-  @Input() options: OptionBase<any>[] = [];
-  form: FormGroup;
-  payLoad = '';
+  @Input() public options: OptionBase<any>[] = [];
+  public form: FormGroup;
+  public payLoad = '';
 
   constructor() { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.form = toFormGroup(this.options);
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     this.payLoad = JSON.stringify(this.form.value);
   }
 }

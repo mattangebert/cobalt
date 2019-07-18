@@ -14,6 +14,10 @@ const routes: Routes = [
 
 ];
 
+/**
+ * Class to create routes
+ * ======================
+ */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

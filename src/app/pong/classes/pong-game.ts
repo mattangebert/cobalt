@@ -19,11 +19,11 @@ interface Score {
 }
 
 export class PongGame {
-    ball: Ball;
-    playerOnePaddle: Paddle;
-    playerTwoPaddle: Paddle;
-    pos: PongOptionService;
-    gameRunning: boolean;
+    public ball: Ball;
+    public playerOnePaddle: Paddle;
+    public playerTwoPaddle: Paddle;
+    public pos: PongOptionService;
+    public gameRunning: boolean;
     private _score: Score;
     private toggle: boolean;
 
@@ -49,7 +49,7 @@ export class PongGame {
         this.resetCanvas();
     }
 
-    resetCanvas(): void {
+    public resetCanvas(): void {
         const paddleLeftOption = this.pos.paddleLeftOption;
         const paddleRightOption = this.pos.paddleRightOption;
 
@@ -83,7 +83,7 @@ export class PongGame {
         this.toggle = !this.toggle;
     }
 
-    tick(controlStates: PongControlStates): void {
+    public tick(controlStates: PongControlStates): void {
         this.ball.move();
 
         this.handleMovement(controlStates);
@@ -238,7 +238,7 @@ export class PongGame {
 
     }
 
-    gameOver(): boolean {
+    public gameOver(): boolean {
         const collisionBoundaries = this.ball.getCollisionBoundaries();
         const condition = collisionBoundaries.left <= 0 || collisionBoundaries.right >= this.width;
 
