@@ -17,10 +17,12 @@ describe('PongOptionService', () => {
     const paddleOption =  {height: 100, width: 20, speed: 2.0};
     service.initializeOptions();
 
-    expect(service.isPlayerOne).toBeTruthy();
-    expect(service.isPlayerTwo).toBeFalsy();
-    expect(service.paddleLeftOption).toEqual(paddleOption);
-    expect(service.paddleRightOption).toEqual(paddleOption);
+    expect(service.options.isPlayerOne).toBe(true);
+    expect(service.options.isPlayerTwo).toBe(false);
+    expect(service.options.paddleLeft).toEqual(paddleOption);
+    expect(service.options.paddleRight).toEqual(paddleOption);
+    expect(service.options.optimizeBallSpeed).toBe(true);
+    expect(service.options.ballSpeed).toBe(2);
   });
 
   it('should return options', () => {
@@ -28,10 +30,12 @@ describe('PongOptionService', () => {
     service.initializeOptions();
     const options =  service.getOptions();
 
-    expect(options.isPlayerOne).toBeTruthy();
-    expect(options.isPlayerTwo).toBeFalsy();
+    expect(options.isPlayerOne).toBe(true);
+    expect(options.isPlayerTwo).toBe(false);
     expect(options.paddleLeft).toEqual(paddleOption);
     expect(options.paddleRight).toEqual(paddleOption);
+    expect(options.optimizeBallSpeed).toBe(true);
+    expect(options.ballSpeed).toBe(2);
   });
 
   it('should set options to value', () => {
@@ -48,15 +52,19 @@ describe('PongOptionService', () => {
         height: 200,
         width: 40,
         speed: 1.0
-      }
+      },
+      optimizeBallSpeed: false,
+      ballSpeed: 5
     };
 
     service.setOptions(option);
 
-    expect(service.isPlayerOne).toBeFalsy();
-    expect(service.isPlayerTwo).toBeTruthy();
-    expect(service.paddleLeftOption).toEqual(paddleOption);
-    expect(service.paddleRightOption).toEqual(paddleOption);
+    expect(service.options.isPlayerOne).toBe(false);
+    expect(service.options.isPlayerTwo).toBe(true);
+    expect(service.options.paddleLeft).toEqual(paddleOption);
+    expect(service.options.paddleRight).toEqual(paddleOption);
+    expect(service.options.optimizeBallSpeed).toBe(false);
+    expect(service.options.ballSpeed).toBe(5);
   });
 });
 

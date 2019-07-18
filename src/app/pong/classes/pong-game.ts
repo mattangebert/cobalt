@@ -105,8 +105,8 @@ export class PongGame {
      * Initialize|reset Canvas with a ball and two paddles
      */
     public resetCanvas(): void {
-        const paddleLeftOption = this.pos.paddleLeftOption;
-        const paddleRightOption = this.pos.paddleRightOption;
+        const paddleLeftOption = this.pos.options.paddleLeft;
+        const paddleRightOption = this.pos.options.paddleRight;
 
         this.playerOnePaddle =  new Paddle(
             paddleLeftOption.height,
@@ -179,9 +179,9 @@ export class PongGame {
     private initializeBall(): void {
         // todo speed or behavour adjustment for ai difficult
 
-        let speed = 2;
-        if (true) { // todo option adjusted speed
-            speed = Math.min(this.pos.paddleLeftOption.speed, this.pos.paddleRightOption.speed) * ((this.width - 100) / this.height);
+        let speed = this.pos.options.ballSpeed;
+        if (this.pos.options.optimizeBallSpeed) {
+            speed = Math.min(this.pos.options.paddleLeft.speed, this.pos.options.paddleRight.speed) * ((this.width - 100) / this.height);
             // speed = (speed / 20) * 21;
         }
 
@@ -202,31 +202,31 @@ export class PongGame {
         this.getOffsets();
 
         // single Player
-        if (this.pos.isPlayerOne !== this.pos.isPlayerTwo) {
+        if (this.pos.options.isPlayerOne !== this.pos.options.isPlayerTwo) {
             const mergedControll: PongControlState = {upPressed: false, downPressed: false};
 
             mergedControll.upPressed = controlStates.controlOne.upPressed || controlStates.controlTwo.upPressed;
             mergedControll.downPressed = controlStates.controlOne.downPressed || controlStates.controlTwo.downPressed;
 
-            if (this.pos.isPlayerOne) {
+            if (this.pos.options.isPlayerOne) {
                 this.handleControl(mergedControll, this.playerOnePaddle);
             }
-            if (this.pos.isPlayerTwo) {
+            if (this.pos.options.isPlayerTwo) {
                 this.handleControl(mergedControll, this.playerTwoPaddle);
             }
         }
 
         // multiplayer
-        if (this.pos.isPlayerOne && this.pos.isPlayerTwo) {
+        if (this.pos.options.isPlayerOne && this.pos.options.isPlayerTwo) {
             this.handleControl(controlStates.controlOne, this.playerOnePaddle);
             this.handleControl(controlStates.controlTwo, this.playerTwoPaddle);
         }
 
         // computer
-        if (!this.pos.isPlayerOne) {
+        if (!this.pos.options.isPlayerOne) {
             this.movePaddle(this.playerOnePaddle, this.offsets.playerOne);
         }
-        if (!this.pos.isPlayerTwo) {
+        if (!this.pos.options.isPlayerTwo) {
             this.movePaddle(this.playerTwoPaddle, this.offsets.playerTwo);
         }
     }

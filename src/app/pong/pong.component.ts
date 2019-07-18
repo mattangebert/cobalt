@@ -93,6 +93,9 @@ export class PongComponent implements OnInit, AfterViewInit {
 
         this.pongOptions.paddleLeft = {height: value['paddleLeftHeight'], width: 20, speed: value['paddleLeftSpeed']};
         this.pongOptions.paddleRight = {height: value['paddleRightHeight'], width: 20, speed: value['paddleRightSpeed']};
+
+        this.pongOptions.optimizeBallSpeed = value['optimizeBallSpeed'];
+        this.pongOptions.ballSpeed = value['ballSpeed'];
       }
     );
   }

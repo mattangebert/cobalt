@@ -106,23 +106,23 @@ describe('PongComponent', () => {
    * Option changes
    */
   it('should listen to isPlayerOne change', () => {
-    expect(component.pongGame.pos.isPlayerOne).toBeTruthy();
+    expect(component.pongGame.pos.options.isPlayerOne).toBe(true);
 
     const element: HTMLInputElement = fixture.nativeElement.querySelector('#player1computer');
     element.click();
     component.startGame();
 
-    expect(component.pongGame.pos.isPlayerOne).toBeFalsy();
+    expect(component.pongGame.pos.options.isPlayerOne).toBe(false);
   });
 
   it('should listen to isPlayerTwo change', () => {
-    expect(component.pongGame.pos.isPlayerTwo).toBeFalsy();
+    expect(component.pongGame.pos.options.isPlayerTwo).toBe(false);
 
     const element: HTMLInputElement = fixture.nativeElement.querySelector('#player2player');
     element.click();
     component.startGame();
 
-    expect(component.pongGame.pos.isPlayerTwo).toBeTruthy();
+    expect(component.pongGame.pos.options.isPlayerTwo).toBe(true);
   });
 
   it('should listen to paddleOne height change', () => {
@@ -180,10 +180,10 @@ describe('PongComponent', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  it('should set gameRunning to rue', () => {
+  it('should set gameRunning to true', () => {
     component.startGame();
 
-    expect(component.pongGame.gameRunning).toBeTruthy();
+    expect(component.pongGame.gameRunning).toBe(true);
   });
 
   it('should call reset canvas', () => {
@@ -227,13 +227,13 @@ describe('PongComponent', () => {
       code: 'KeyW'
     }));
 
-    expect(component.controlStates.controlOne.upPressed).toBeTruthy();
+    expect(component.controlStates.controlOne.upPressed).toBe(true);
 
     window.dispatchEvent(new KeyboardEvent('keyup', {
       code: 'KeyW'
     }));
 
-    expect(component.controlStates.controlOne.upPressed).toBeFalsy();
+    expect(component.controlStates.controlOne.upPressed).toBe(false);
   });
 
   it('should listen to keyDownEvent S & set controlOne downPressed', () => {
@@ -241,13 +241,13 @@ describe('PongComponent', () => {
       code: 'KeyS'
     }));
 
-    expect(component.controlStates.controlOne.downPressed).toBeTruthy();
+    expect(component.controlStates.controlOne.downPressed).toBe(true);
 
     window.dispatchEvent(new KeyboardEvent('keyup', {
       code: 'KeyS'
     }));
 
-    expect(component.controlStates.controlOne.downPressed).toBeFalsy();
+    expect(component.controlStates.controlOne.downPressed).toBe(false);
   });
 
   it('should listen to keyDownEvent ArrowUp & set controlTwo upPressed', () => {
@@ -255,13 +255,13 @@ describe('PongComponent', () => {
       code: 'ArrowUp'
     }));
 
-    expect(component.controlStates.controlTwo.upPressed).toBeTruthy();
+    expect(component.controlStates.controlTwo.upPressed).toBe(true);
 
     window.dispatchEvent(new KeyboardEvent('keyup', {
       code: 'ArrowUp'
     }));
 
-    expect(component.controlStates.controlTwo.upPressed).toBeFalsy();
+    expect(component.controlStates.controlTwo.upPressed).toBe(false);
   });
 
   it('should listen to keyDownEvent ArrowDown & set controlTwo downPressed', () => {
@@ -269,13 +269,13 @@ describe('PongComponent', () => {
       code: 'ArrowDown'
     }));
 
-    expect(component.controlStates.controlTwo.downPressed).toBeTruthy();
+    expect(component.controlStates.controlTwo.downPressed).toBe(true);
 
     window.dispatchEvent(new KeyboardEvent('keyup', {
       code: 'ArrowDown'
     }));
 
-    expect(component.controlStates.controlTwo.downPressed).toBeFalsy();
+    expect(component.controlStates.controlTwo.downPressed).toBe(false);
   });
 
   it('should call startGame when Space is released', () => {

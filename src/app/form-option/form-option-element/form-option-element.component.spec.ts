@@ -40,6 +40,6 @@ describe('FormOptionElementComponent', () => {
   });
 
   it('should return true', () => {
-    expect(component.isValid).toBeTruthy();
+    expect(component.isValid).toBe(true);
   });
 });

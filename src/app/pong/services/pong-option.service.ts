@@ -32,6 +32,14 @@ export interface PongOption {
    * Options for right paddle
    */
   paddleRight: PaddleOption;
+  /**
+   * If speed of ball should be optimized
+   */
+  optimizeBallSpeed: boolean;
+  /**
+   * Speed of ball if not optimized
+   */
+  ballSpeed: number;
 }
 
 /**
@@ -43,21 +51,9 @@ export interface PongOption {
 })
 export class PongOptionService {
   /**
-   * If left paddle is controlled by a player
+   * Options for pong game
    */
-  public isPlayerOne: boolean;
-  /**
-   * If right paddle is controlled by a player
-   */
-  public isPlayerTwo: boolean;
-  /**
-   * Options for left paddle
-   */
-  public paddleLeftOption: PaddleOption;
-  /**
-   * Options for right paddle
-   */
-  public paddleRightOption: PaddleOption;
+  public options: PongOption;
 
   constructor() {}
 
@@ -65,10 +61,14 @@ export class PongOptionService {
    * Initalize options with default values
    */
   public initializeOptions(): void {
-    this.isPlayerOne = true;
-    this.isPlayerTwo = false;
-    this.paddleLeftOption = {height: 100, width: 20, speed: 2.0};
-    this.paddleRightOption = {height: 100, width: 20, speed: 2.0};
+    this.options = {
+      isPlayerOne: true,
+      isPlayerTwo: false,
+      paddleLeft: {height: 100, width: 20, speed: 2.0},
+      paddleRight: {height: 100, width: 20, speed: 2.0},
+      optimizeBallSpeed: true,
+      ballSpeed: 2
+    };
   }
 
   /**
@@ -77,10 +77,12 @@ export class PongOptionService {
    */
   public getOptions(): PongOption {
     const pongOption = {
-      isPlayerOne: this.isPlayerOne,
-      isPlayerTwo: this.isPlayerTwo,
-      paddleLeft: this.paddleLeftOption,
-      paddleRight: this.paddleRightOption
+      isPlayerOne: this.options.isPlayerOne,
+      isPlayerTwo: this.options.isPlayerTwo,
+      paddleLeft: this.options.paddleLeft,
+      paddleRight: this.options.paddleRight,
+      optimizeBallSpeed: this.options.optimizeBallSpeed,
+      ballSpeed: this.options.ballSpeed,
     };
 
     return pongOption;
@@ -91,9 +93,13 @@ export class PongOptionService {
    * @param options The options for the pong game
    */
   public setOptions(options: PongOption): void {
-    this.isPlayerOne = options.isPlayerOne;
-    this.isPlayerTwo = options.isPlayerTwo;
-    this.paddleLeftOption = options.paddleLeft;
-    this.paddleRightOption = options.paddleRight;
+    this.options = {
+      isPlayerOne: options.isPlayerOne,
+      isPlayerTwo: options.isPlayerTwo,
+      paddleLeft: options.paddleLeft,
+      paddleRight: options.paddleRight,
+      optimizeBallSpeed: options.optimizeBallSpeed,
+      ballSpeed: options.ballSpeed,
+    }
   }
 }

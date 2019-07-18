@@ -12,17 +12,21 @@ describe('PongGame', () => {
 
   beforeEach(() => {
     posStub = {
-      isPlayerOne: true,
-      isPlayerTwo: false,
-      paddleLeftOption: {
-        height: 100,
-        width: 20,
-        speed: 2
-      },
-      paddleRightOption: {
-        height: 100,
-        width: 20,
-        speed: 2
+      options: {
+        isPlayerOne: true,
+        isPlayerTwo: false,
+        paddleLeft: {
+          height: 100,
+          width: 20,
+          speed: 2
+        },
+        paddleRight: {
+          height: 100,
+          width: 20,
+          speed: 2
+        },
+        optimizeBallSpeed: true,
+        ballSpeed: 2
       }
     };
 
@@ -63,6 +67,30 @@ describe('PongGame', () => {
     expect(pongGame.ball).toBeTruthy();
   });
 
+  it('should move with set speed', () => {
+    pos.options.optimizeBallSpeed = false;
+    pos.options.ballSpeed = 100;
+    pongGame.resetCanvas();
+
+    expect(pongGame.ball.getPosition().x).toBe(400);
+
+    pongGame.tick(controlStates);
+
+    expect(pongGame.ball.getPosition().x).toBe(300);
+  });
+
+  it('should move with optimized speed', () => {
+    pos.options.optimizeBallSpeed = true;
+    pos.options.ballSpeed = 100;
+    pongGame.resetCanvas();
+
+    expect(pongGame.ball.getPosition().x).toBe(400);
+
+    pongGame.tick(controlStates);
+
+    expect(pongGame.ball.getPosition().x).not.toBe(300);
+  });
+
   it('should set first initalize ball with positive speedRatio.x', () => {
     expect(pongGame.ball.getSpeedRatio().x).toBeGreaterThan(0);
   });
@@ -92,8 +120,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.upPressed = true;
 
     pongGame.tick(controlStates);
@@ -109,8 +137,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlTwo.upPressed = true;
 
     pongGame.tick(controlStates);
@@ -126,8 +154,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.upPressed = true;
     controlStates.controlTwo.upPressed = true;
 
@@ -144,8 +172,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.upPressed = true;
     controlStates.controlTwo.downPressed = true;
 
@@ -162,8 +190,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.upPressed = true;
     controlStates.controlOne.downPressed = true;
 
@@ -180,8 +208,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.upPressed = true;
     controlStates.controlOne.downPressed = true;
     controlStates.controlTwo.downPressed = true;
@@ -199,8 +227,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlTwo.upPressed = true;
     controlStates.controlOne.downPressed = true;
 
@@ -217,8 +245,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlTwo.upPressed = true;
     controlStates.controlTwo.downPressed = true;
 
@@ -235,8 +263,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlTwo.upPressed = true;
     controlStates.controlTwo.downPressed = true;
     controlStates.controlOne.downPressed = true;
@@ -254,8 +282,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.upPressed = true;
     controlStates.controlOne.downPressed = true;
     controlStates.controlTwo.upPressed = true;
@@ -274,8 +302,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlOne.downPressed = true;
 
     pongGame.tick(controlStates);
@@ -291,8 +319,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlTwo.downPressed = true;
 
     pongGame.tick(controlStates);
@@ -308,8 +336,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
     controlStates.controlTwo.downPressed = true;
 
     pongGame.tick(controlStates);
@@ -325,8 +353,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerOnePaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = false;
 
     pongGame.tick(controlStates);
 
@@ -342,8 +370,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.upPressed = true;
 
     pongGame.tick(controlStates);
@@ -359,8 +387,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlTwo.upPressed = true;
 
     pongGame.tick(controlStates);
@@ -376,8 +404,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.upPressed = true;
     controlStates.controlTwo.upPressed = true;
 
@@ -394,8 +422,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.upPressed = true;
     controlStates.controlTwo.downPressed = true;
 
@@ -412,8 +440,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.upPressed = true;
     controlStates.controlOne.downPressed = true;
 
@@ -430,8 +458,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.upPressed = true;
     controlStates.controlOne.downPressed = true;
     controlStates.controlTwo.downPressed = true;
@@ -449,8 +477,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlTwo.upPressed = true;
     controlStates.controlOne.downPressed = true;
 
@@ -467,8 +495,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlTwo.upPressed = true;
     controlStates.controlTwo.downPressed = true;
 
@@ -485,8 +513,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlTwo.upPressed = true;
     controlStates.controlTwo.downPressed = true;
     controlStates.controlOne.downPressed = true;
@@ -504,8 +532,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.upPressed = true;
     controlStates.controlOne.downPressed = true;
     controlStates.controlTwo.upPressed = true;
@@ -524,8 +552,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlOne.downPressed = true;
 
     pongGame.tick(controlStates);
@@ -541,8 +569,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlTwo.downPressed = true;
 
     pongGame.tick(controlStates);
@@ -558,8 +586,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
     controlStates.controlTwo.downPressed = true;
 
     pongGame.tick(controlStates);
@@ -575,8 +603,8 @@ describe('PongGame', () => {
     const spyTwo = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyThree = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = true;
 
     pongGame.tick(controlStates);
 
@@ -595,8 +623,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlOne.upPressed = true;
 
@@ -619,8 +647,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlOne.upPressed = true;
     controlStates.controlTwo.upPressed = true;
@@ -645,8 +673,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlOne.upPressed = true;
     controlStates.controlTwo.downPressed = true;
@@ -670,8 +698,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlOne.downPressed = true;
 
@@ -695,8 +723,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlOne.downPressed = true;
     controlStates.controlTwo.upPressed = true;
@@ -720,8 +748,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlOne.downPressed = true;
     controlStates.controlTwo.downPressed = true;
@@ -745,8 +773,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     pongGame.tick(controlStates);
 
@@ -767,8 +795,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlTwo.upPressed = true;
 
@@ -791,8 +819,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = true;
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerOne = true;
+    pos.options.isPlayerTwo = true;
 
     controlStates.controlTwo.downPressed = true;
 
@@ -815,8 +843,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = false;
 
     pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 0}, {x: 1, y: 0}); // higher means y is smaller
 
@@ -838,8 +866,8 @@ describe('PongGame', () => {
     const spyP2Two = spyOn(pongGame.playerTwoPaddle, 'accelerateDown');
     const spyP2Three = spyOn(pongGame.playerTwoPaddle, 'declerate');
 
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = false;
 
     pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 800}, {x: 1, y: 0}); // lower means y is greater
 
@@ -854,8 +882,8 @@ describe('PongGame', () => {
   });
 
   it('should move paddleOne to ball with + a offset', () => {
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = false;
 
     for (let i = 0; i < 200; i++) { // 200 ticks should be enough to reach the ball
       pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 100}, {x: 1, y: -1});
@@ -867,8 +895,8 @@ describe('PongGame', () => {
   });
 
   it('should move paddleTwo to ball with + a offset', () => {
-    pos.isPlayerOne = false;
-    pos.isPlayerTwo = false;
+    pos.options.isPlayerOne = false;
+    pos.options.isPlayerTwo = false;
 
     pongGame.ball = new Ball(15, 15, 2, {x: 400, y: 100}, {x: 1, y: -1}); // move one time to set offsets.isPositive to false
     pongGame.tick(controlStates);
@@ -968,7 +996,7 @@ describe('PongGame', () => {
     pongGame.ball = new Ball(15, 15, 2, {x: 740, y: 300}, {x: 1, y: 1}); // paddle starts at -50 - width => x: 740
 
     const spy = spyOn(pongGame.ball, 'reverseX');
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerTwo = true;
 
     pongGame.tick(controlStates);
 
@@ -979,7 +1007,7 @@ describe('PongGame', () => {
     pongGame.ball = new Ball(15, 15, 2, {x: 725, y: 300}, {x: 1, y: 1});
 
     const spy = spyOn(pongGame.ball, 'reverseX');
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerTwo = true;
 
     pongGame.tick(controlStates);
 
@@ -991,7 +1019,7 @@ describe('PongGame', () => {
     pongGame.playerTwoPaddle =  new Paddle(100, 20, 2, {x: 750, y: 100});
 
     const spy = spyOn(pongGame.ball, 'reverseX');
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerTwo = true;
 
     pongGame.tick(controlStates);
 
@@ -1002,7 +1030,7 @@ describe('PongGame', () => {
     pongGame.ball = new Ball(15, 15, 2, {x: 740, y: 300}, {x: -1, y: 1});
 
     const spy = spyOn(pongGame.ball, 'reverseX');
-    pos.isPlayerTwo = true;
+    pos.options.isPlayerTwo = true;
 
     pongGame.tick(controlStates);
 
@@ -1015,7 +1043,7 @@ describe('PongGame', () => {
 
     const spy = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = false;
+    pos.options.isPlayerOne = false;
     pongGame.tick(controlStates);
 
     expect(spy).toHaveBeenCalledTimes(1);
@@ -1027,7 +1055,7 @@ describe('PongGame', () => {
 
     const spy = spyOn(pongGame.playerOnePaddle, 'declerate');
 
-    pos.isPlayerOne = false;
+    pos.options.isPlayerOne = false;
     pongGame.tick(controlStates);
 
     expect(spy).toHaveBeenCalledTimes(1);
@@ -1069,7 +1097,7 @@ describe('PongGame', () => {
    * gameOver()
    ****************************************************************************************************************************************/
   it('should return false when game is running', () => {
-    expect(pongGame.gameOver()).toBeFalsy();
+    expect(pongGame.gameOver()).toBe(false);
   });
 
   it('should return gameOver true when ball runs out left side', () => {
@@ -1077,7 +1105,7 @@ describe('PongGame', () => {
 
     pongGame.tick(controlStates);
 
-    expect(pongGame.gameOver()).toBeTruthy();
+    expect(pongGame.gameOver()).toBe(true);
 
   });
 
@@ -1086,7 +1114,7 @@ describe('PongGame', () => {
 
     pongGame.tick(controlStates);
 
-    expect(pongGame.gameOver()).toBeTruthy();
+    expect(pongGame.gameOver()).toBe(true);
   });
 
   it('should increase playerOne score by 1 if ball runs out right side', () => {

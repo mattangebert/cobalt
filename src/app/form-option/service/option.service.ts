@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { OptionBase } from '../model/option-base';
 import { OptionInput } from '../model/option-input';
 import { OptionSelect } from '../model/option-select';
+import { OptionCheckbox } from '../model/option-checkbox';
 
 /**
  * Service providing options for form-option component
@@ -62,6 +63,7 @@ export class OptionService {
         value: 100,
         min: 10,
         max: 600,
+        step: 10,
         order: 3
       }),
 
@@ -83,6 +85,7 @@ export class OptionService {
         value: 100,
         min: 10,
         max: 600,
+        step: 10,
         order: 5
       }),
 
@@ -96,6 +99,24 @@ export class OptionService {
         step: 0.1,
         order: 6
       }),
+
+      new OptionCheckbox({
+        key: 'optimizeBallSpeed',
+        label: 'Optimized Ball Speed',
+        value: true,
+        order: 7
+      }),
+
+      new OptionInput({
+        key: 'ballSpeed',
+        label: 'Ball Speed',
+        type: 'number',
+        value: 2,
+        min: 0,
+        max: 10,
+        step: .1,
+        order: 8
+      })
     ];
 
     this.options = options.sort((a, b) => a.order - b.order);
