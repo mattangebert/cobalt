@@ -10,7 +10,7 @@ import { OptionBase } from '../model/option-base';
   selector: 'app-form-option-element',
   templateUrl: './form-option-element.component.html',
   styleUrls: ['./form-option-element.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormOptionElementComponent {
   /**
