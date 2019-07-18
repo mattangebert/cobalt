@@ -59,36 +59,40 @@ import { FormGroup } from '@angular/forms';
 export class FormOptionComponent implements OnInit {
 
   /**
-   * array of options for form as form elements
+   * Array of options for form as form elements
    */
   @Input() public options: OptionBase<any>[] = [];
   /**
-   * forms formGroup
+   * If safe button should be renderd
+   */
+  @Input() public removeSave: boolean;
+  /**
+   * Forms formGroup
    */
   public form: FormGroup;
   /**
-   * variable to print form values as json to template
+   * Variable to print form values as json to template
    */
   public payLoad = '';
 
   constructor() { }
 
   /**
-   * initialise Compomet with options as FormGroup
+   * Initialise Compomet with options as FormGroup
    */
   public ngOnInit(): void {
     this.form = toFormGroup(this.options);
   }
 
   /**
-   * save form values as json in variable payLoad on for submit
+   * Save form values as json in variable payLoad on for submit
    */
   public onSubmit(): void {
     this.payLoad = JSON.stringify(this.form.value);
   }
 
   /**
-   * tracks option for angular ngFor
+   * Tracks option for angular ngFor
    */
   public trackByFn(index: number, item: OptionBase<any>): string {
     return item.key;

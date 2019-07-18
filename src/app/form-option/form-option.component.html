@@ -5,7 +5,7 @@
             <app-form-option-element [option]="option" [form]="form"></app-form-option-element>
         </div>
 
-        <div class="form-row">
+        <div *ngIf="!removeSave" class="form-row">
             <button type="submit" [disabled]="!form.valid" i18n="@@saveMessage">Save</button>
         </div>
     </form>

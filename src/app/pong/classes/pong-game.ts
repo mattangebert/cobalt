@@ -165,9 +165,12 @@ export class PongGame {
      * Update score points of players
      */
     private updateScore(): void {
-        this._score.playerOne += this.ball.getPosition().x > this.width / 2 ? 1 : 0;
-        this._score.playerTwo += this.ball.getPosition().x < this.width / 2 ? 1 : 0;
-
+        if (this.ball.getPosition().x > this.width / 2) {
+            this._score.playerOne ++;
+        }
+        if (this.ball.getPosition().x < this.width / 2) {
+            this._score.playerTwo ++;
+        }
     }
 
     /**
