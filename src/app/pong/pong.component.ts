@@ -5,6 +5,7 @@ import { OptionService } from '../form-option/service/option.service';
 import { FormOptionComponent } from '../form-option/form-option.component';
 import { PongOptionService, PongOption } from './services/pong-option.service';
 import { OptionBase } from '../form-option/model/option-base';
+import { timer } from 'rxjs';
 
 /**
  * Component to create a pong game
@@ -96,6 +97,8 @@ export class PongComponent implements OnInit, AfterViewInit {
 
         this.pongOptions.optimizeBallSpeed = value['optimizeBallSpeed'];
         this.pongOptions.ballSpeed = value['ballSpeed'];
+
+        this.pongOptions.pointsToWin = value['pointsToWin'];
       }
     );
   }
@@ -145,9 +148,15 @@ export class PongComponent implements OnInit, AfterViewInit {
   public renderFrame(): void {
     if (this.pongGame.gameOver()) {
       this.renderScore(); // render end score
-      this.renderGameOver(); // render GameOver info
 
       clearInterval(this.interval);
+
+      if ( this.pongGame.score.playerOne >= this.pongOptions.pointsToWin ||
+          this.pongGame.score.playerTwo >= this.pongOptions.pointsToWin ) {
+            this.renderGameOver(); // render GameOver info
+      } else {
+        this.restartGame();
+      }
 
       return;
     }
@@ -176,14 +185,40 @@ export class PongComponent implements OnInit, AfterViewInit {
     // Draw ball
     const ballObj = this.pongGame.ball;
     bounds = ballObj.getCollisionBoundaries();
-    // this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
+    //this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
 
-    this.context.arc(bounds.left, bounds.top, 5, 0 , 2 * Math.PI);
+    this.context.arc(bounds.left, bounds.top, Math.max(this.pongGame.ball.getHeight(), this.pongGame.ball.getWidth()) / 2, 0 , 2 * Math.PI);
     this.context.fill();
     this.context.beginPath();
 
     // Render next frame
     window.requestAnimationFrame(() => this.renderFrame());
+  }
+
+  /**
+   * Counts down to restart game
+   */
+  private restartGame(): void {
+    const restartTimer = timer(0, 1000);
+    let secondToRestart = 3;
+    this.renderDuration();
+
+    const test = restartTimer.subscribe((x) => {
+      // erase old countdown
+      this.context.fillStyle = 'rgb(0,0,0)';
+      this.context.fillRect( this.width / 2 - 50, this.height / 2 - 50, 100, 100);
+
+      this.context.fillStyle = 'rgb(255,255,255)';
+      this.context.font = '50px Arial';
+      this.context.fillText((secondToRestart) + '', this.width / 2, this.height / 2);
+
+      secondToRestart --;
+
+      if (secondToRestart < 0) {
+        test.unsubscribe();
+        this.startGame();
+      }
+    });
   }
 
   /**
@@ -214,9 +249,19 @@ export class PongComponent implements OnInit, AfterViewInit {
 
       this.context.font = '50px Arial';
       this.context.fillText('Game Over!', this.width / 2, this.height / 2);
-      this.context.font = '20px Arial';
-      const end = new Date();
-      this.context.fillText(((end.getTime() - this.start.getTime()) / 1000) + 's', this.width / 2, this.height / 2 + 30);
+      this.renderDuration();
+
+      this.pongGame.resetScore();
+  }
+
+  /**
+   * Render duration of game
+   */
+  private renderDuration():void {
+    this.context.fillStyle = 'rgb(255,255,255)';
+    this.context.font = '20px Arial';
+    const end = new Date();
+    this.context.fillText(((end.getTime() - this.start.getTime()) / 1000) + 's', this.width / 2, 80 /*this.height / 2 + 30*/);
   }
 
   /**

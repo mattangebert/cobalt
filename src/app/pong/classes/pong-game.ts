@@ -81,7 +81,7 @@ export class PongGame {
      * Offsets to let ai paddles catch ball with a ancle
      * Boolean to teterminate if new offset should be set
      */
-    private offsets = { playerOne: 0, playerTwo: 0, isPositive: true };
+    private offsets = { playerOne: 5, playerTwo: 5, isPositive: true };
 
     constructor(
         height: number,
@@ -162,6 +162,16 @@ export class PongGame {
     }
 
     /**
+     * Reset Score
+     */
+    public resetScore(): void {
+        this._score = {
+            playerOne: 0,
+            playerTwo: 0
+        };
+    }
+
+    /**
      * Update score points of players
      */
     private updateScore(): void {
@@ -185,9 +195,9 @@ export class PongGame {
             // speed = (speed / 20) * 21;
         }
 
-        this.ball =  new Ball(15, 15, speed, { x: this.width / 2, y: this.height / 2 }, { x: 1, y: 0 });
+        this.ball =  new Ball(10, 10, speed, { x: this.width / 2, y: this.height / 2 }, { x: 1, y: 0 });
         if (this.toggleBallDirectionStart) {
-            this.ball =  new Ball(15, 15, speed,
+            this.ball =  new Ball(10, 10, speed,
                 { x: this.width / 2, y: this.height / 2}, { x: -1, y: 0 });
             this.offsets.isPositive = false;
         }

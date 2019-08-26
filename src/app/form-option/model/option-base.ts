@@ -78,7 +78,6 @@ export class OptionBase<T> {
      * has to be not used in any other form element yet
      */
     public controlType: string;
-
     constructor(options: {
         /**
          * start value for form element or empty

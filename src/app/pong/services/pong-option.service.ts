@@ -40,6 +40,10 @@ export interface PongOption {
    * Speed of ball if not optimized
    */
   ballSpeed: number;
+  /**
+   * Points needed to win
+   */
+  pointsToWin: number;
 }
 
 /**
@@ -63,11 +67,12 @@ export class PongOptionService {
   public initializeOptions(): void {
     this.options = {
       isPlayerOne: true,
-      isPlayerTwo: false,
+      isPlayerTwo: true,
       paddleLeft: {height: 100, width: 20, speed: 2.0},
       paddleRight: {height: 100, width: 20, speed: 2.0},
       optimizeBallSpeed: true,
-      ballSpeed: 2
+      ballSpeed: 2,
+      pointsToWin: 3,
     };
   }
 
@@ -83,6 +88,7 @@ export class PongOptionService {
       paddleRight: this.options.paddleRight,
       optimizeBallSpeed: this.options.optimizeBallSpeed,
       ballSpeed: this.options.ballSpeed,
+      pointsToWin: this.options.pointsToWin,
     };
 
     return pongOption;
@@ -100,6 +106,7 @@ export class PongOptionService {
       paddleRight: options.paddleRight,
       optimizeBallSpeed: options.optimizeBallSpeed,
       ballSpeed: options.ballSpeed,
-    }
+      pointsToWin: options.pointsToWin,
+    };
   }
 }

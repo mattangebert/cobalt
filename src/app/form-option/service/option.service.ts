@@ -116,7 +116,17 @@ export class OptionService {
         max: 10,
         step: .1,
         order: 8
-      })
+      }),
+
+      new OptionInput({
+        key: 'pointsToWin',
+        label: 'Points needed to win',
+        type: 'number',
+        value: 3,
+        min: 1,
+        max: 99,
+        order: 9
+      }),
     ];
 
     this.options = options.sort((a, b) => a.order - b.order);
