@@ -1,0 +1,7 @@
+/**
+ * Character
+ * =========
+ */
+export class Character {
+
+}

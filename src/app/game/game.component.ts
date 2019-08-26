@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { CharacterSprite, CharacterSpriteOptions } from '../character/character-sprite';
+import { characterlist } from '../character/character-list';
+import { KeyHandlerService } from '../services/key-handler.service';
 
 /**
  * Component to create a Game
@@ -27,17 +30,55 @@ export class GameComponent implements OnInit {
   /**
    * Canvas Context to be drawn on
    */
-  private context: CanvasRenderingContext2D;
+  private ctx: CanvasRenderingContext2D;
+  /**
+   * Interval to handle game loop
+   */
+  private interval: NodeJS.Timer;
+  /**
+   * remove me
+   */
+  private sprite: any;
 
-  constructor() { }
+  constructor(private keyHandler: KeyHandlerService) { }
 
   /**
    * initalise canvas context
    */
   public ngOnInit(): void {
-    this.context = this.canvasElement.nativeElement.getContext('2d');
+    this.ctx = this.canvasElement.nativeElement.getContext('2d');
+  }
 
-    this.context.fillStyle = 'red';
-    this.context.fillRect(0, 0, this.width, this.height);
+  /**
+   * Animate   // todo replace with better name
+   */
+  public animate(): void {
+        /**
+     * The sprite image as HtmlImage
+     */
+    const image = new Image();
+
+    const knight = characterlist.find(x => x.name === 'Knight');
+    image.src = knight.image;
+    const options: CharacterSpriteOptions = {
+      orientations: knight.orientation,
+      ticksPerFrame: 100,
+      context: this.ctx,
+      width: knight.width,
+      height: knight.height,
+      image: image
+    };
+    this.sprite = new CharacterSprite(options);
+
+    this.sprite.render();
+  }
+
+  /**
+   * start game loop
+   */
+  public start(): void {
+    this.interval = setInterval(() => {
+      this.sprite.update();
+    }, 1 / 60);
   }
 }
