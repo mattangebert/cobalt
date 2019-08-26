@@ -185,7 +185,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     // Draw ball
     const ballObj = this.pongGame.ball;
     bounds = ballObj.getCollisionBoundaries();
-    //this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
+    // this.context.fillRect(bounds.left, bounds.top, ballObj.getWidth(), ballObj.getHeight());
 
     this.context.arc(bounds.left, bounds.top, Math.max(this.pongGame.ball.getHeight(), this.pongGame.ball.getWidth()) / 2, 0 , 2 * Math.PI);
     this.context.fill();
@@ -257,7 +257,7 @@ export class PongComponent implements OnInit, AfterViewInit {
   /**
    * Render duration of game
    */
-  private renderDuration():void {
+  private renderDuration(): void {
     this.context.fillStyle = 'rgb(255,255,255)';
     this.context.font = '20px Arial';
     const end = new Date();
