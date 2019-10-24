@@ -83,8 +83,8 @@ export class KeyHandlerService {
     constructor(
         // @Inject(DOCUMENT) private document: any
     ) {
-        this.charKeys = DEFAULT_CHAR_KEYS;
-        this.movement = DEFAULT_CHAR_MOVMENT;
+        this.charKeys = {...DEFAULT_CHAR_KEYS};
+        this.movement = {...DEFAULT_CHAR_MOVMENT};
         this.charMovement = new BehaviorSubject(this.movement);
 
         const keyEvents = merge(
@@ -93,7 +93,6 @@ export class KeyHandlerService {
         ).pipe(
             distinctUntilChanged((prev: KeyboardEvent, curr: KeyboardEvent) => prev.code === curr.code && prev.type === curr.type),
         );
-
 
         keyEvents.subscribe(({code, type}) => {
             const movementKey = Object.keys(this.charKeys).find(key => this.charKeys[key] === code);

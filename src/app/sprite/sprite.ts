@@ -1,3 +1,5 @@
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../game/game.component';
+
 export interface SpriteOptions {
     /**
      * The context
@@ -61,8 +63,8 @@ export class Sprite {
      * Render the sprite onto canvas context
      */
     public render(position: SpritePosition = {column: 1, row: 1}): void {
-        const dx = (400 - this.width / 2); // todo replace
-        const dy = (300 - this.height / 2); // todo replace
+        const dx = (CANVAS_WIDTH / 2 - this.width / 2);
+        const dy = (CANVAS_HEIGHT / 2 - this.height / 2);
 
         this.ctx.clearRect(dx, dy, this.width, this.height);
 

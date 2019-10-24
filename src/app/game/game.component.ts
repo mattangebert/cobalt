@@ -2,7 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy } fro
 import { CharacterSprite, CharacterSpriteOptions } from '../character/character-sprite';
 import { characterlist } from '../character/character-list';
 import { KeyHandlerService, CharacterMovement, DEFAULT_CHAR_MOVMENT } from '../services/key-handler.service';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+
+export const CANVAS_WIDTH = 800;
+export const CANVAS_HEIGHT = 600;
 
 /**
  * Component to create a Game
@@ -22,11 +25,11 @@ export class GameComponent implements OnInit {
   /**
    * Width of Canvas
    */
-  public width = 800;
+  public width = CANVAS_WIDTH;
   /**
    * Height of Canvas
    */
-  public height = 600;
+  public height = CANVAS_HEIGHT;
 
   /**
    * Canvas Context to be drawn on
@@ -47,7 +50,7 @@ export class GameComponent implements OnInit {
   /**
    * The current character movement
    */
-  private currentCharacterMovement: CharacterMovement = DEFAULT_CHAR_MOVMENT;
+  private currentCharacterMovement: CharacterMovement = Object.assign({}, DEFAULT_CHAR_MOVMENT);
 
   constructor(public keyHandler: KeyHandlerService) { }
 
@@ -68,7 +71,7 @@ export class GameComponent implements OnInit {
   private initaliseCharacter(): void {
     const image = new Image();
 
-    const knight = characterlist.find(x => x.name === 'Knight');
+    const knight = characterlist.find(x => x.name === 'Knight'); // todo char picker
     image.src = knight.image;
     const options: CharacterSpriteOptions = {
       orientations: knight.orientation,
@@ -86,16 +89,12 @@ export class GameComponent implements OnInit {
    * start game loop
    */
   public start(): void {
+    this.keyHandler.charMovement.pipe(
+      debounceTime(100)
+    ).subscribe(
+      this.handleCharacterMovmement.bind(this)
+      );
     this.interval = setInterval(() => {
-      this.keyHandler.charMovement.pipe(
-        distinctUntilChanged(this.handleCharacterMovmement.bind(this))
-      ).subscribe();
-      /*
-      this.keyHandler.charMovement.subscribe({
-        next(e: any): void { console.log(e); },
-      });
-      */
-      // this.handleCharacterMovmement.bind(this)
       this.sprite.update();
     }, 1 / 60);
   }
@@ -145,22 +144,50 @@ export class GameComponent implements OnInit {
       this.sprite.currentOrientation = this.spriteOptions.orientations.walking.front.left;
     }
 
-    // char doesnt move
+    // char doesnt move (stands)
     if (movment.up === movment.down && movment.left === movment.right) {
-      this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.right;
-
-      if (this.currentCharacterMovement.left && !this.currentCharacterMovement.right) {
-        this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.left;
-      }
-
-      if (this.currentCharacterMovement.up) {
-        this.sprite.currentOrientation = this.spriteOptions.orientations.standing.back.right;
+      if (this.currentCharacterMovement.up && !this.currentCharacterMovement.down) {
+        // did move up
         if (this.currentCharacterMovement.left && !this.currentCharacterMovement.right) {
+          // moved left
           this.sprite.currentOrientation = this.spriteOptions.orientations.standing.back.left;
+        }
+        if (!this.currentCharacterMovement.left && this.currentCharacterMovement.right) {
+          // moved right
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.back.right;
+        }
+        if (this.currentCharacterMovement.left === this.currentCharacterMovement.right) {
+          // moved straight
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.back.right;
+        }
+      }
+      if (!this.currentCharacterMovement.up && this.currentCharacterMovement.down) {
+        // did move down
+        if (this.currentCharacterMovement.left && !this.currentCharacterMovement.right) {
+          // moved left
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.left;
+        }
+        if (!this.currentCharacterMovement.left && this.currentCharacterMovement.right) {
+          // moved right
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.right;
+        }
+        if (this.currentCharacterMovement.left === this.currentCharacterMovement.right) {
+          // moved straight
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.right;
+        }
+      }
+      if (this.currentCharacterMovement.up === this.currentCharacterMovement.down) {
+        // moved left or right but not up or down
+        if (this.currentCharacterMovement.left && !this.currentCharacterMovement.right) {
+          // moved left
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.left;
+        }
+        if (!this.currentCharacterMovement.left && this.currentCharacterMovement.right) {
+          // moved right
+          this.sprite.currentOrientation = this.spriteOptions.orientations.standing.front.right;
         }
       }
     }
-
-    this.currentCharacterMovement = movment;
+    this.currentCharacterMovement = {...movment};
   }
 }
