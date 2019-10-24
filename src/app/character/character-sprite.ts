@@ -123,8 +123,6 @@ export class CharacterSprite extends Sprite {
                 this.frameIndex = 0;
             }
 
-            console.log(this.frameIndex);
-
             this.render(this.currentOrientation[this.frameIndex]);
         }
     }

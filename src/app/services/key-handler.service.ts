@@ -1,7 +1,9 @@
-import { HostListener, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HostListener, Injectable, Inject } from '@angular/core';
+import { BehaviorSubject, fromEvent, merge } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, distinctUntilKeyChanged } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
-interface CharacterMovement {
+export interface CharacterMovement {
     /**
      * If the character moves upwards
      */
@@ -46,72 +48,58 @@ const DEFAULT_CHAR_KEYS: CharacterMovementKeys = {
     right: 'KeyD'
 };
 
+export const DEFAULT_CHAR_MOVMENT: CharacterMovement = {
+    up: false,
+    down: false,
+    left: false,
+    right: false
+};
+
 /**
  * KeyHandlerService
  * =================
  */
 @Injectable({
     providedIn: 'root',
-  })
+})
 export class KeyHandlerService {
     /**
      * The directions the charavter moves towards
      */
     private movement: CharacterMovement;
+    /** key down events */
+    private keyDownEvents$ = fromEvent(window.document, 'keydown');
+    /** key up events */
+    private keyUpEvents$ = fromEvent(window.document, 'keyup');
     /**
      * Subject to listen to current movement;
      */
-    public charMovement  = new BehaviorSubject(this.movement);
+    public charMovement: BehaviorSubject<CharacterMovement>;
     /**
      * The input key to handle character movmement
      */
     private charKeys: CharacterMovementKeys;
 
-    constructor(charKeys: CharacterMovementKeys) {
-        this.charKeys = charKeys || DEFAULT_CHAR_KEYS;
-    }
+    constructor(
+        // @Inject(DOCUMENT) private document: any
+    ) {
+        this.charKeys = DEFAULT_CHAR_KEYS;
+        this.movement = DEFAULT_CHAR_MOVMENT;
+        this.charMovement = new BehaviorSubject(this.movement);
 
-    /**
-   * Handle user keydown events
-   * @param event Keys user presses down
-   */
-  @HostListener('window:keydown', ['$event'])
-  public keyEvent(event: KeyboardEvent): void {
-    if (this.charKeys.up === event.code) {
-        this.movement.up = true;
-    }
-    if (this.charKeys.down === event.code) {
-        this.movement.down = true;
-    }
-    if (this.charKeys.left === event.code) {
-        this.movement.left = true;
-    }
-    if (this.charKeys.right === event.code) {
-        this.movement.right = true;
-    }
+        const keyEvents = merge(
+            this.keyDownEvents$,
+            this.keyUpEvents$
+        ).pipe(
+            distinctUntilChanged((prev: KeyboardEvent, curr: KeyboardEvent) => prev.code === curr.code && prev.type === curr.type),
+        );
 
-    this.charMovement.next(this.movement);
-  }
 
-  /**
-   * Handle user keyup events
-   * @param event Keys user releases
-   */
-  @HostListener('window:keyup', ['$event'])
-  public keyEvent2(event: KeyboardEvent): void {
-    if (this.charKeys.up === event.code) {
-        this.movement.up = false;
-    }
-    if (this.charKeys.down === event.code) {
-        this.movement.down = false;
-    }
-    if (this.charKeys.left === event.code) {
-        this.movement.left = false;
-    }
-    if (this.charKeys.right === event.code) {
-        this.movement.right = false;
-    }
+        keyEvents.subscribe(({code, type}) => {
+            const movementKey = Object.keys(this.charKeys).find(key => this.charKeys[key] === code);
+            this.movement[movementKey] = type === 'keydown';
+            this.charMovement.next(this.movement);
+        });
 
-    this.charMovement.next(this.movement);
-  }
+    }
 }
