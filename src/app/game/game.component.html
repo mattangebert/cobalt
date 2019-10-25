@@ -1,5 +1,12 @@
-<canvas #gameCanvas id="gameCanvas" width="{{ width }}" height="{{ height }}">
+<div class="canvas-wrapper">
+    <canvas #gameCanvasLayerOne id="gameCanvasLayerOne" width="{{ width }}" height="{{ height }}">
 
-</canvas>
+    </canvas>
+    <canvas #gameCanvasLayerTwo id="gameCanvasLayerTwo" width="{{ width }}" height="{{ height }}">
+    
+    </canvas>
+    <canvas #gameCanvas id="gameCanvas" width="{{ width }}" height="{{ height }}">
+    </canvas>
+</div>
 <br>
 <button (click)="start()">Play</button>

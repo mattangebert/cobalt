@@ -1,4 +1,4 @@
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from '../game/game.component';
+import { CANVAS_WIDTH, CANVAS_HEIGHT, CHAR_WIDHT, CHAR_HEIGHT } from '../services/config.service';
 
 export interface SpriteOptions {
     /**
@@ -40,17 +40,25 @@ export class Sprite {
      */
     public ctx: CanvasRenderingContext2D;
     /**
-     * The width
+     * The sprite width
      */
     public width: number;
     /**
-     * The height
+     * The sprite height
      */
     public height: number;
     /**
      * The sprite canvas images
      */
     public image: HTMLImageElement;
+    /**
+     * The Sprites width on canvas
+     */
+    private SPRITE_WIDTH: number = CHAR_WIDHT;
+    /**
+     * The sprites height on cavas
+     */
+    private SPIRTE_HEIGHT: number = CHAR_WIDHT;
 
     constructor(options: SpriteOptions) {
         this.ctx = options.context;
@@ -63,10 +71,10 @@ export class Sprite {
      * Render the sprite onto canvas context
      */
     public render(position: SpritePosition = {column: 1, row: 1}): void {
-        const dx = (CANVAS_WIDTH / 2 - this.width / 2);
-        const dy = (CANVAS_HEIGHT / 2 - this.height / 2);
+        const dx = (CANVAS_WIDTH / 2 -  this.SPRITE_WIDTH / 2);
+        const dy = (CANVAS_HEIGHT / 2 - this.SPIRTE_HEIGHT / 2);
 
-        this.ctx.clearRect(dx, dy, this.width, this.height);
+        this.ctx.clearRect(dx, dy, this.SPRITE_WIDTH, this.SPIRTE_HEIGHT);
 
         this.ctx.drawImage(
             this.image,
@@ -76,8 +84,8 @@ export class Sprite {
             this.height,
             dx,
             dy,
-            this.width,
-            this.height
+            this.SPRITE_WIDTH,
+            this.SPIRTE_HEIGHT
         );
     }
 }

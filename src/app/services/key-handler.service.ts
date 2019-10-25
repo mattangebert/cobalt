@@ -1,7 +1,6 @@
-import { HostListener, Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, fromEvent, merge } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, distinctUntilKeyChanged } from 'rxjs/operators';
-import { DOCUMENT } from '@angular/common';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 export interface CharacterMovement {
     /**
